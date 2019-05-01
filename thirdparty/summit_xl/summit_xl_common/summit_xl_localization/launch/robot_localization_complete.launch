@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<launch>
+
+  <!-- roslaunch arguments -->
+  <arg name="debug" default="false"/>
+  <arg name="gui" default="true"/>
+
+  <!-- Transform from odom to base_footprint (IMU and odometry) -->
+  <include file="$(find summit_xl_localization)/launch/robot_localization_odom.launch" />
+
+  <!-- Transform from world to odom (IMU, odometry and GPS) -->
+  <include file="$(find summit_xl_localization)/launch/robot_localization_world.launch" />
+
+  <!-- Get GPS odometry -->
+  <include file="$(find summit_xl_localization)/launch/navsat_transform_node.launch" />
+
+</launch>

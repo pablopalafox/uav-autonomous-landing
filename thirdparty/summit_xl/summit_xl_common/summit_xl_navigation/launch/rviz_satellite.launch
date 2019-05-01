@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<launch>
+ 
+ <!-- Before launching these nodes do roslaunch summit_xl_gazebo summit_xl.launch -->
+ 
+  <node pkg="tf" type="static_transform_publisher" name="world2odom" args="0 0 0 0 0 0 1 world odom 20"/>
+
+  <node name="throttle_gps_fix" pkg="topic_tools" type="throttle" args="messages mavros/gps/fix 0.1 /fix_viz" /> 
+
+  <node pkg="rviz" type="rviz" name="rviz" output="screen" args="-d $(find summit_xl_navigation)/config_rviz/rviz_satellite.rviz"/>
+
+</launch>

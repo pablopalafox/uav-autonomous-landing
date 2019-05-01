@@ -1,0 +1,53 @@
+summit_xl:
+  joint_blw_velocity_controller:
+#    type: effort_controllers/JointPositionController
+#    type: velocity_controllers/JointVelocityController
+#    type: effort_controllers/JointVelocityController
+    type: effort_controllers/JointEffortController
+    joint: joint_back_left_wheel
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  joint_brw_velocity_controller:
+#    type: effort_controllers/JointPositionController
+#    type: velocity_controllers/JointVelocityController
+#    type: effort_controllers/JointVelocityController
+    type: effort_controllers/JointEffortController
+    joint: joint_back_right_wheel
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  joint_frw_velocity_controller:
+#    type: effort_controllers/JointPositionController
+#    type: velocity_controllers/JointVelocityController
+#    type: effort_controllers/JointVelocityController
+    type: effort_controllers/JointEffortController
+    joint: joint_front_right_wheel
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  joint_flw_velocity_controller:
+#    type: effort_controllers/JointPositionController
+#    type: velocity_controllers/JointVelocityController
+#    type: effort_controllers/JointVelocityController
+    type: effort_controllers/JointEffortController
+    joint: joint_front_left_wheel
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+
+  joint_blw_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: joint_back_left_steer
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  
+  joint_brw_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: joint_back_right_steer
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+
+  joint_frw_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: joint_front_right_steer
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+
+  joint_flw_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: joint_front_left_steer
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+
+  joint_read_state_controller:
+    type: joint_state_controller/JointStateController 
+    publish_rate: 100.0

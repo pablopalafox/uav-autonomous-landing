@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+
+<launch>
+  
+<!-- Launches the AR.Drone driver -->
+  <node name="ardrone_driver" pkg="ardrone_autonomy" type="ardrone_driver" output="screen" clear_params="true">
+      <param name="outdoor" value="0" />        <!-- If we are flying outdoors, will select more aggressive default settings -->
+      <param name="flight_without_shell" value="0" /> <!-- Changes internal controller gains if we are flying without the propeller guard -->
+      
+      <param name="altitude_max" value="3000" />    <!-- in millimeters = 3 meters = 9' -->
+        <param name="altitude_min" value="50" />    <!-- in millimeters = 5cm = 2" -->
+        <param name="euler_angle_max" value="0.1" />  <!-- maximum allowable body angle in radians = 5 degrees -->
+        <param name="control_vz_max" value="200" />   <!-- maximum z velocity in mm/sec = 0.2m/sec -->
+      <param name="control_yaw" value="0.7" />    <!-- maximum rotation rate in radians/sec = 40 degrees per second (1/9 rev/sec) -->
+
+      <param name="detect_type" value="10" />
+      <param name="detections_select_h" value="32" /> <!-- In the horizontal camera, look for the orange-blue-orange markers -->
+      <param name="detections_select_v_hsync" value="128" />  <!-- In the vertical camera, detect the A4 marker -->
+      <param name="enemy_colors" value="3" />     <!-- Orange-Blue-Orange = 3 -->
+      <param name="enemy_without_shell" value="0" />  <!-- Detect the indoor stickers, rather than the outdoor hull -->
+
+      <rosparam file="$(find ardrone_autonomy)/data/camera_info/ardrone_bottom.yaml" command="load" />
+      <rosparam file="$(find ardrone_autonomy)/data/camera_info/ardrone_front.yaml" command="load" />
+
+  </node>
+ 
+
+
+</launch>

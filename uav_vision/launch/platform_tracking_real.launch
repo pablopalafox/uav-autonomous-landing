@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+
+<launch>
+	<node name="summit_tracking_real" pkg="uav_vision" type="summit_tracking_real" output="screen">
+        <!--TOPICS-->
+        <param name="cmd_topic_vel" value="/cmd_vel"/>
+        <param name="summit_position_topic" value="/summit_xl/estimated_position"/>
+        <param name="position_quad_base_topic" value="/quadrotor/tracking/target_position"/>
+        <param name="estimated_summit_position_topic" value="world_estimated_position"/>
+        <param name="ardrone_navdata" value="/ardrone/navdata"/>
+    </node>
+
+
+    <node name="joy_node" pkg="joy" type="joy_node" output="screen" clear_params="true">
+        <param name="dev" type="str" value="/dev/input/js1"/>
+    </node>
+
+
+    <!-- /////////////////////////////////////////////////////////////////////////////////////// -->
+                                    <!-- TELEOPERATION NODE -->
+    <arg name="control_mode" default="twist" />
+
+    <node name="quadrotor_teleop" pkg="hector_quadrotor_teleop" type="quadrotor_teleop">
+        <param name="control_mode" value="$(arg control_mode)" />
+        <param name="x_axis" value="2"/>   <!-- 2 -->
+        <param name="y_axis" value="1"/>   <!-- 1 -->
+        <param name="z_axis" value="4"/>   <!-- 4 -->
+        <param name="yaw_axis" value="3"/> <!-- 3 -->
+
+        <param name="x_velocity_max" value="5"/>
+        <param name="y_velocity_max" value="5"/>
+        <param name="z_velocity_max" value="7"/>
+        <param name="slow_button" value="6"/>
+        
+        <param name="init_takeoff" value="13"/>
+        <param name="init_landing" value="15"/>
+    </node>
+    <!-- /////////////////////////////////////////////////////////////////////////////////////// -->
+
+</launch>

@@ -1,0 +1,27 @@
+<package>
+  <name>summit_xl_common</name>
+  <version>1.0.0</version>
+  <description>URDF description of the Summit XL and Summit XL HL, platform messages and other files for simulation.</description>
+
+
+  <license>BSD</license>
+
+  <url type="website">http://ros.org/wiki/summit_xl_common</url>
+  <url type="bugtracker">https://github.com/RobotnikAutomation/summit_xl_common/issues</url>
+
+  <author email="rguzman@robotnik.es">Roberto Guzmán</author>
+  <author email="rnavarro@robotnik.es">Román Navarro</author>
+  <author email="jarino@robotnik.es">Jorge Ariño</author>
+  <author email="dcarbonell@robotnik.es">Dani Carbonell</author>
+
+  <maintainer email="info@robotnik.es">Robotnik</maintainer>
+  
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <run_depend>summit_xl_description</run_depend>
+  <run_depend>summit_xl_pad</run_depend>
+
+  <export>
+    <metapackage/>
+  </export>
+</package>

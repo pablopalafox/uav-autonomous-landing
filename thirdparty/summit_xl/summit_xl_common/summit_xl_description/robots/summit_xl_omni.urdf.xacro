@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+<robot name="summit_xl" xmlns:xacro="http://www.ros.org/wiki/xacro"> 
+
+	<!-- ***************** -->
+	<!-- Imported elements -->
+	<!-- ***************** -->
+	
+	<!-- First we import all posible elements defined in the urdf.xacro files. All these elements are defined as macro:xacros -->
+
+	<!-- Import summit XL base elements -->
+	<xacro:include filename="$(find summit_xl_description)/urdf/bases/summit_xl_base.urdf.xacro" />
+  
+	<!-- Import summit XL wheels -->
+	<xacro:include filename="$(find summit_xl_description)/urdf/wheels/omni_wheel.urdf.xacro" />
+    
+	<!-- Import all available sensors -->
+	<xacro:include filename="$(find robotnik_sensors)/urdf/all_sensors.urdf.xacro" />
+
+      
+      
+	<!-- ***************** -->
+	<!-- Global parameters -->
+	<!-- ***************** -->
+  
+	<xacro:property name="PI" value="3.1415926535897931"/>
+  
+	<!-- Wheel parameters -->
+	<xacro:property name="wheel_offset_x" value="0.22911" />    <!-- x,y,z in translation from base_link to the center of the wheel -->
+	<xacro:property name="wheel_offset_y" value="0.24070" />    
+	<xacro:property name="wheel_offset_z" value="0.0" />
+
+	<!-- Flag to select the high or low quality model -->
+	<xacro:property name="hq" value="true" />
+	
+	
+	<!-- *************** -->
+	<!-- Robots Elements -->
+	<!-- *************** -->
+
+	<!-- Here we create the robot elements using the xacro:macros imported at the beggining of this file -->
+	
+	<!-- Summit XL base -->
+  <xacro:summit_xl_base name="summit_xl" publish_bf="true" hq="${hq}"/>
+  
+  <!-- Gazebo ros control pluggins -->
+  <xacro:ros_control/>
+  
+  <!-- Gazebo omni steering plugin -->
+  <xacro:omni_steering/>
+  
+    
+	<!-- WHEELS -->
+
+	<xacro:omni_wheel name="front_right" parent="base_link" reflect="false" hq="true">
+		<origin xyz="${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+	</xacro:omni_wheel>
+  
+	<xacro:omni_wheel name="front_left" parent="base_link" reflect="true" hq="true">
+		<origin xyz="${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+	</xacro:omni_wheel>
+  
+	<xacro:omni_wheel name="back_left" parent="base_link" reflect="false" hq="true">
+		<origin xyz="-${wheel_offset_x} ${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+	</xacro:omni_wheel>
+  
+	<xacro:omni_wheel name="back_right" parent="base_link" reflect="true" hq="true">
+		<origin xyz="-${wheel_offset_x} -${wheel_offset_y} ${wheel_offset_z}" rpy="0 0 0"/>
+	</xacro:omni_wheel>
+
+
+
+	<!-- SENSORS -->
+
+  <!-- Hokuyo laser sensors can be parametized with min_angle and max_angle e.g: -->
+  <!--xacro:sensor_hokuyo_utm30lx name="hokuyo_base" parent="base_link" min_angle="2.35" max_angle="-2.35"-->
+  
+	<xacro:sensor_hokuyo_utm30lx name="hokuyo_base" parent="base_link">
+		<origin xyz="0.0 0.0 0.33" rpy="0 0 0"/>
+	</xacro:sensor_hokuyo_utm30lx>
+  
+<!--
+	<xacro:sensor_hokuyo_urg04lx name="hokuyo1" parent="base_link">
+		<origin xyz="-0.1 0.0 0.33" rpy="0 0 0"/>
+	</xacro:sensor_hokuyo_urg04lx>
+-->
+
+<!--
+  <xacro:sensor_hokuyo_ust10lx name="hokuyo_base" parent="base_link">
+		<origin xyz="0.0 0.0 0.33" rpy="0 0 0"/>
+	</xacro:sensor_hokuyo_ust10lx>
+-->
+    
+	<xacro:sensor_axis name="camera" parent="base_link">
+		<origin xyz="0.19 0 0.17" rpy="0 ${15*PI/180} 0"/>
+	</xacro:sensor_axis>
+  
+	<xacro:sensor_imu name="imu" parent="base_link">
+		<origin xyz="-0.18 0.0 0.170" rpy="0 0 0"/>
+	</xacro:sensor_imu>
+  
+	<xacro:sensor_gps name="gps" parent="base_link">
+		<origin xyz="-0.22 0 0.275" rpy="0 0 0"/>
+	</xacro:sensor_gps>
+    
+<!--
+	<xacro:sensor_kinect name="kinect" parent="base_link">
+		<origin xyz="0.325 0.0 0.16" rpy="0 0 0"/> 
+	</xacro:sensor_kinect>  
+-->
+  
+<!--
+	<xacro:sensor_fotonic name="fotonic" parent="base_link">
+		<origin xyz="0.3 0.0 0.24" rpy="0 0 0"/> 
+	</xacro:sensor_fotonic>  
+-->
+  
+
+</robot>
+

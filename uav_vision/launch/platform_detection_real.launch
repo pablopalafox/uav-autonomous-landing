@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+
+<launch>
+    <node name="platform_detection_real" pkg="uav_vision" type="platform_detection_real" output="screen">
+    
+        <!--COLOUR SELECTION-->
+        <param name="H_min" value="170"/>
+        <param name="H_max" value="179"/>
+        <param name="S_min" value="150"/>
+        <param name="S_max" value="196"/>
+        <param name="V_min" value="60"/>
+        <param name="V_max" value="255"/>
+        
+        <!--TARJET SIZE-->
+        <param name="teoric_size" value="0.64"/> <!--Value in m2-->
+        <param name="altura_platform" value="0.392"/> <!--Value in m-->
+        
+
+        <!--TOPICS-->
+        <param name="image_topic" value="/ardrone/image_raw"/>
+        <param name="cam_info_topic" value="/ardrone/bottom/camera_info"/>
+        <param name="platform_position_topic" value="/platform_xl/estimated_position"/>
+        <param name="ardrone_navdata" value="/ardrone/navdata"/>
+        <param name="imu_topic" value="/ardrone/imu"/>
+
+
+
+    </node>
+ </launch>

@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<launch>
+
+  <!-- start gazebo simulation -->
+  <include file="$(find summit_xl_gazebo)/launch/summit_xl.launch"/>
+
+  <!-- summit_xl_robot_control will provide control for the PTZ camera and the height of the Summit-X robot -->
+  <include file="$(find summit_xl_robot_control)/launch/summit_xl_robot_control.launch"/>
+  
+</launch>

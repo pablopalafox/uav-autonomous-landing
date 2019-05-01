@@ -1,0 +1,6 @@
+<launch>
+	<node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="teleop" output="screen">
+	</node>
+	<node pkg="ardrone_moves" type="ardrone_moves" name="ardrone_moves" output="screen">
+	</node>
+</launch>

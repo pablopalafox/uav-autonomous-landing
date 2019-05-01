@@ -1,0 +1,33 @@
+<package>
+  <name>summit_xl_gazebo</name>
+  <version>1.0.0</version>
+  <description>
+		Launch files and world files to start the models in gazebo
+	</description>
+  <maintainer email="info@robotnik.es">Robotnik</maintainer>
+
+  <license>BSD</license>
+
+
+  <author email="rguzman@robotnik.es">Robotnik</author>
+  
+  
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <run_depend>roscpp</run_depend>
+  <run_depend>std_srvs</run_depend>
+  <run_depend>std_msgs</run_depend>
+  <run_depend>tf</run_depend>
+  <run_depend>gazebo_ros</run_depend>
+  <run_depend>summit_xl_control</run_depend>  
+  <run_depend>summit_xl_robot_control</run_depend>  
+  <run_depend>summit_xl_description</run_depend> 
+  <run_depend>summit_xl_joystick</run_depend>   
+  <run_depend>wam_description</run_depend> 
+  <run_depend>xacro</run_depend> 
+
+  <export>
+	  <gazebo_ros plugin_path="${prefix}/lib" gazebo_media_path="${prefix}" />
+  </export>
+  
+</package>

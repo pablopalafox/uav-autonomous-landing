@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<launch>
+
+  <rosparam command="load" file="$(find summit_xl_robot_control)/config/summit_xl_robot_control.yaml" />
+
+  <rosparam command="load" file="$(find summit_xl_robot_control)/config/summit_xl.yaml"/>
+
+  <node name="summit_xl_robot_control" pkg="summit_xl_robot_control" type="summit_xl_robot_control" output="screen"/>
+  
+</launch>
+
+

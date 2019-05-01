@@ -1,0 +1,9 @@
+summit_xl_robot_control:
+      
+     model: summit_xl
+      
+      # kinematic parameters 
+     summit_xl_wheel_diameter: 0.25 
+     summit_xl_d_tracks_m: 1.00
+
+     publish_odom_tf: false 

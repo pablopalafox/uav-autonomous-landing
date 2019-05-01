@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package>
+  <name>summit_xl_control</name>
+  <version>1.0.0</version>
+  <description>
+		This package contains the launch files that load the required controller interfaces for simulation in Gazebo.
+  </description>
+
+  <maintainer email="info@robotnik.es">Robotnik</maintainer>
+
+  <license>BSD</license>
+  
+  <buildtool_depend>catkin</buildtool_depend>
+  
+  <run_depend>ros_controllers</run_depend>
+  <run_depend>ros_control</run_depend>
+  <run_depend>robot_state_publisher</run_depend>
+  <run_depend>summit_xl_pad</run_depend>  
+
+</package>

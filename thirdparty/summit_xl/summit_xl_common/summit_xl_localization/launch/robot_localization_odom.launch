@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<launch>  
+      
+     <node pkg="tf" type="static_transform_publisher" name="fcu_broadcaster" args="0 -0.1 0.40 0 0 0 1 base_footprint fcu 50"/> 
+
+     <!-- ekf_loc1 fuses only continuous data (imu and odometry). Publish the tf from odom_frame to base_footprint -->
+   <node pkg="robot_localization" type="ekf_localization_node" name="ekf_loc1" clear_params="true" output="screen">      
+      <remap from="odometry/filtered" to="odometry/filtered_odom" />
+
+      <param name="frequency" value="30"/>
+      <param name="sensor_timeout" value="0.1"/>
+
+      <param name="two_d_mode" type="bool" value="true"/>
+
+      <param name="odom_frame" value="odom"/>
+      <param name="base_link_frame" value="base_footprint"/>
+      <param name="world_frame" value="odom"/>
+
+      <param name="odom0" value="/odom"/>
+      <param name="imu0" value="/imu/data"/>
+
+      <rosparam param="odom0_config">[true, true, false,
+                                      false, false, true,
+                                      true,  false, false,
+                                      false, false, true,
+                                      false, false, false]</rosparam>
+
+      <!-- Be careful when setting the z-orientation value to true because you are going to fuse orientation data 
+	coming from an attitude estimatior which is more likely to use a (slow-response) compass -->	
+      <rosparam param="imu0_config">[false, false, false,
+                                     false, false, false, 
+                                     false, false, false,
+                                     true, true, true,
+                                     false, false, false]</rosparam>
+
+      <param name="odom0_differential" value="true"/>
+      <param name="imu0_differential" value="false" />
+
+      <param name="odom0_relative" value="false"/>
+      <!-- Set to false when fusing an absolute orientation estimation (e.g. coming from an attitude 
+	estimator which using a magnetic compass)-->
+      <param name="imu0_relative" value="true"/>
+    
+      <param name="imu0_remove_gravitational_acceleration" type="bool" value="true"/>
+      <param name="print_diagnostics" value="false"/>
+   </node>
+
+</launch>

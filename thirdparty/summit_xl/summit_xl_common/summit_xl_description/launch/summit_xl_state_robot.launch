@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<launch>
+
+  <arg name="urdf_file" default="$(find xacro)/xacro.py '$(find summit_xl_description)/robots/summit_xl.urdf.xacro'" />
+  <param name="robot_description" command="$(arg urdf_file)" />
+
+
+  <!-- Combine joint values -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher"/>
+  
+</launch>
+

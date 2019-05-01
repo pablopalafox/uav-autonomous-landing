@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<robot name="platform_cylinder" xmlns:xacro="http://www.ros.org/wiki/xacro">
+ 
+  <xacro:property name="cylinder_radius" value="0.08" /> 
+  <xacro:property name="cylinder_height" value="0.1" />
+  <xacro:property name="cylinder_mass" value="0.5" /> <!-- in kg-->
+
+  <xacro:macro name="platform_cylinder" params="name parent *origin"> 
+
+    <joint name="${name}_joint" type="fixed">
+      <axis xyz="0 1 0"/>
+      <xacro:insert_block name="origin"/>
+      <parent link="${parent}"/>
+      <child link="${name}"/>
+    </joint>
+
+    <link name="${name}">
+      <inertial>
+        <mass value="${cylinder_mass}"/>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.000001" iyz="0" izz="0.0001"/>
+      </inertial>
+      <visual>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <material name="platform_cylinder_color">
+           <color rgba="1 0 0 1"/>
+        </material>
+        <geometry>
+          <cylinder length="${cylinder_height}" radius="${cylinder_radius}" />
+        </geometry>
+      </visual>
+      <collision>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <geometry>
+          <cylinder length="${cylinder_height}" radius="${cylinder_radius}" />
+        </geometry>
+      </collision>
+    </link>
+    
+    
+    <gazebo reference="${name}">
+      <material>Gazebo/White</material>
+      <gravity>true</gravity>
+    </gazebo>
+    
+  </xacro:macro>
+</robot>

@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<robot name="sensor_hokuyo_urg04lx" xmlns:xacro="http://ros.org/wiki/xacro">
+	
+	
+  <xacro:macro name="sensor_hokuyo_urg04lx" params="name parent *origin min_angle:=2.0943 max_angle:=-2.0943">
+     
+    <joint name="${name}_laser_joint" type="fixed">
+      <!-- FRONT MOUNT  -->
+      <!-- origin xyz="0.29 0 0.1" -->
+      <!-- TOP MOUNT -->
+      <!-- origin xyz="0.0 0.0 0.325"-->
+      <xacro:insert_block name="origin" />
+      <parent link="${parent}"/>
+      <child link="${name}_laser_link"/>
+    </joint>
+  
+    
+    <link name="${name}_laser_link">
+      <collision>
+        <origin xyz="0 0 -0.05" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.1 0.1 0.08"/>
+        </geometry>
+      </collision>
+  
+      <visual>
+        <origin xyz="0 0 -0.05" rpy="0 0 0"/>
+        <geometry>
+            <mesh filename="package://robotnik_sensors/meshes/hokuyo_urg_04lx.dae"/>
+        </geometry>
+      </visual>
+  
+      <inertial>
+        <mass value="1e-5" />
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+      </inertial>
+    </link>
+    
+  
+    <!-- Hokuyo sensor for simulation -->		
+    <sensor_hokuyo_urg_gazebo/>
+		
+  </xacro:macro>
+  
+    
+  <xacro:macro name="sensor_hokuyo_urg_gazebo">
+    <gazebo reference="${name}_laser_link">
+			<sensor type="ray" name="${name}_sensor">
+				<pose>0 0 0 0 0 0</pose>
+				<visualize>false</visualize>
+				<update_rate>10</update_rate>
+				<ray>
+					<scan>
+						<horizontal>
+							<samples>640</samples>
+							<resolution>1</resolution>
+							<min_angle>${min_angle}</min_angle>
+							<max_angle>${max_angle}</max_angle>
+						</horizontal>
+					</scan>
+					<range>
+						<min>0.02</min>
+						<max>4.0</max>
+						<resolution>0.00628318531</resolution>
+					</range>
+					<noise>
+						<type>gaussian</type>
+						<mean>0.0</mean>
+						<stddev>0.01</stddev>
+					</noise>
+				</ray>
+				<plugin name="gazebo_ros_head_hokuyo_controller" filename="libgazebo_ros_laser.so">
+					<topicName>${name}/scan</topicName>
+					<frameName>${name}_laser_link</frameName>
+				</plugin>
+			</sensor>
+	</gazebo>
+  </xacro:macro>
+  
+</robot>

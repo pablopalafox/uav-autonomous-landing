@@ -1,0 +1,18 @@
+num_of_buttons: 13 
+axis_linear: 1
+axis_angular: 2
+scale_linear: 2.0
+scale_angular: 6.0
+button_speed_up: 3
+button_speed_down: 1
+button_dead_man: 5
+button_output_1: 2
+button_output_2: 0
+output_1: 0
+output_2: 2
+# Works by means of axis instead of by buttons
+button_ptz_tilt_up: 4
+button_ptz_tilt_down: 6
+button_ptz_pan_right: 2 
+button_ptz_pan_left: 0
+

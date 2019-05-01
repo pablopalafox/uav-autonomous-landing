@@ -1,0 +1,18 @@
+summit_xl_robot_control:
+     frw_vel_topic: /summit_xl/joint_frw_velocity_controller/command
+     flw_vel_topic: /summit_xl/joint_flw_velocity_controller/command
+     blw_vel_topic: /summit_xl/joint_blw_velocity_controller/command
+     brw_vel_topic: /summit_xl/joint_brw_velocity_controller/command
+     joint_front_right_wheel: joint_front_right_wheel
+     joint_front_left_wheel: joint_front_left_wheel
+     joint_back_left_wheel: joint_back_left_wheel
+     joint_back_right_wheel: joint_back_right_wheel
+     frw_pos_topic: /summit_xl/joint_frw_position_controller/command
+     flw_pos_topic: /summit_xl/joint_flw_position_controller/command
+     blw_pos_topic: /summit_xl/joint_blw_position_controller/command
+     brw_pos_topic: /summit_xl/joint_brw_position_controller/command
+     joint_frw_steer: joint_front_right_steer
+     joint_flw_steer: joint_front_left_steer
+     joint_blw_steer: joint_back_left_steer
+     joint_brw_steer: joint_back_right_steer
+

@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<robot name="landing_platform" xmlns:xacro="http://www.ros.org/wiki/xacro">
+ 
+  <!-- PLATFORM -->
+  <xacro:property name="platform_length_x" value="0.8" />
+  <xacro:property name="platform_width_y" value="0.8" />  
+  <xacro:property name="platform_height_z" value="0.01" />
+  <xacro:property name="platform_mass" value="0.5" /> <!-- in kg-->
+ 
+
+
+  <xacro:macro name="landing_platform" params="name parent *origin"> 
+
+    <joint name="${name}_joint" type="fixed">
+      <axis xyz="0 1 0"/>
+      <xacro:insert_block name="origin"/>
+      <parent link="${parent}"/>
+      <child link="${name}"/>
+    </joint>
+
+    <link name="${name}">
+      <inertial>
+        <mass value="${platform_mass}"/>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.000001" iyz="0" izz="0.0001"/>
+      </inertial>
+      <visual>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <material name="landing_platform_color">
+           <color rgba="1 0 0 1"/>
+        </material>
+        <geometry>
+          <box size="${platform_length_x} ${platform_width_y} ${platform_height_z}"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <geometry>          
+          <box size="${platform_length_x} ${platform_width_y} ${platform_height_z}"/>
+        </geometry>
+      </collision>
+    </link>
+    
+    
+    <gazebo reference="${name}">
+      <!-- <material>ArucoVisualMarker6/Marker</material> -->
+      <material>Gazebo/Red</material>
+      <gravity>true</gravity>
+    </gazebo>
+    
+  
+ 
+ 
+ 
+ 
+  </xacro:macro>
+</robot>

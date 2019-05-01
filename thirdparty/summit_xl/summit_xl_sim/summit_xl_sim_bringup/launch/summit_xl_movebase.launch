@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<launch>
+
+  <!-- start gazebo simulation -->
+  <include file="$(find summit_xl_gazebo)/launch/summit_xl.launch"/>
+
+  <!-- start joystick -->
+  <include file="$(find summit_xl_pad)/launch/summit_xl_pad.launch"/>
+
+  <!-- summit_xl_robot_control will provide control for the PTZ camera and the height of the Summit-X robot -->
+  
+  <!-- <include file="$(find summit_xl_robot_control)/launch/summit_xl_robot_control.launch"/> -->
+  
+  <!-- start AMCL localization -->
+  <include file="$(find summit_xl_navigation)/launch/summit_xl_nav.launch"/>
+  
+</launch>

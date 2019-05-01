@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package>
+  <name>robotnik_sensors</name>
+  <version>1.0.0</version>
+  <description>Robotnik standard sensors description. URDF and meshses.</description>
+  <license>BSD</license>
+
+  <author email="rguzman@robotnik.es">Roberto Guzmán</author>
+  <author email="rnavarro@robotnik.es">Román Navarro</author>
+  <author email="jarino@robotnik.es">Jorge Ariño</author>
+  <author email="dcarbonell@robotnik.es">Dani Carbonell</author>
+  <buildtool_depend>catkin</buildtool_depend>
+    
+  <maintainer email="dcarbonell@robotnik.es">Dani Carbonell</maintainer>
+  
+  <run_depend>urdf</run_depend>
+  <run_depend>tf</run_depend>
+  <run_depend>gazebo_ros</run_depend>
+  <run_depend>robot_state_publisher</run_depend>
+  <run_depend>xacro</run_depend>
+  <run_depend>hector_gazebo_plugins</run_depend>
+  
+</package>

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+
+<launch>
+    <node name="platform_detection" pkg="uav_vision" type="platform_detection" output="screen">
+
+        <param name="use_trackbars" value="false"/>
+
+        <param name="height_landing_platform" value="0.497"/>
+        
+        <param name="platform_position_in_ardrone_topic" value="/platform/current_platform_position_in_ardrone"/>
+        <param name="platform_position_in_world_topic" value="/platform/current_platform_position_in_world"/>
+        <param name="indicator_position_in_ardrone_topic" value="/platform/current_indicator_position_in_ardrone"/>    
+
+        <param name="image_topic" value="/ardrone/bottom/image_raw"/>
+        <param name="cam_info_topic" value="/ardrone/bottom/camera_info"/>
+        
+        <param name="altimeter_topic" value="/ardrone/altimeter"/>
+        <param name="sonar_topic" value="/ardrone/sonar_height"/>  
+        <param name="gt_altitude_topic" value="/ardrone/groundtruth_altitude"/>  
+        <param name="imu_topic" value="/ardrone/imu"/>
+
+        <param name="cmd_topic_vel" value="/ardrone/cmd_vel"/>
+    </node>
+ </launch>
+

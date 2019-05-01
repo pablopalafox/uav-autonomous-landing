@@ -1,0 +1,15 @@
+summit_xl_robot_control:
+
+     model: summit_xl_omni
+
+      # kinematic parameters 
+     summit_xl_wheel_diameter: 0.25 
+     summit_xl_d_tracks_m: 1.00
+     
+      # omni 
+      # Length 
+     summit_xl_wheelbase: 0.446
+      # Width
+     summit_xl_trackwidth: 0.408 
+
+     publish_odom_tf: true 

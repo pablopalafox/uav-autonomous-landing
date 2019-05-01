@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<robot name="structure" xmlns:xacro="http://ros.org/wiki/xacro">
+		
+  <xacro:macro name="structure" params="name parent *origin">
+    	 
+	  <joint name="${name}_joint" type="fixed">
+	    <axis xyz="0 1 0"/>
+	    <xacro:insert_block name="origin"/>
+	    <parent link="${parent}"/>
+	    <child link="${name}_link"/>
+	  </joint>
+	
+	  <link name="${name}_link">
+	    <inertial>
+	      <mass value="0.001"/>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.000001" iyz="0" izz="0.0001"/>
+	    </inertial>
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <material name="alu_color">
+           <color rgba="0.5 0.5 0.5 1"/>
+        </material>
+	      <geometry>
+	        <mesh filename="package://summit_xl_description/meshes/structures/structure_ptz_rgbd_gps.dae"/>	        
+	      </geometry>
+	    </visual>
+	    <collision>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+	        <mesh filename="package://summit_xl_description/meshes/structures/structure_ptz_rgbd_gps.dae"/>
+	      </geometry>
+	    </collision>
+	  </link>
+      
+	  <gazebo reference="${name}_link">
+	    <material>Gazebo/White</material>
+	    <gravity>true</gravity>
+	  </gazebo>
+      
+  </xacro:macro>
+
+</robot>
+
+
+

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<launch>
+
+ <!-- joy node -->
+  <!-- node name="joy" pkg="joy" type="joy" respawn="true" -->
+  <node pkg="joy" type="joy_node" name="ps3_joy" output="screen" respawn="true">
+    <param name="dev" type="string" value="/dev/input/js0" />
+    <param name="deadzone" value="0.12" />
+    <param name="autorepeat_rate" value="10.0" type="double" />
+  </node>
+  
+  <!-- Parameters -->
+  <!-- param name="cmd_topic_vel" value="/summit_xl_node/command" type="string"/ -->
+  <param name="cmd_topic_vel" value="/summit_xl_controller/command" type="string"/>
+  <param name="cmd_service_io" value="/modbus_io/write_digital_output" type="string"/>
+  <param name="cmd_topic_ptz" value="/axis1/cmd_ptz" type="string"/>
+  <!-- param name="cmd_topic_ptz" value="/axis/cmd" type="string"/ -->
+  <!-- rosparam command="load" file="$(find summit_xl_pad)/launch/thrustmaster.yaml"/ -->
+  <rosparam command="load" file="$(find summit_xl_pad)/launch/ps3.yaml" />
+  <node name="summit_xl_pad" pkg="summit_xl_pad" type="summit_xl_pad" output="screen"/>
+  
+  <!-- node name="summit_xl_pad" pkg="summit_xl_pad" type="summit_xl_pad" args="load thrustmaster.yaml" / --> 
+  <!-- node name="summit_xl_pad" pkg="summit_xl_pad" type="summit_xl_pad" args="load logitech.yaml" / --> 
+  <!-- node name="summit_xl_pad" pkg="summit_xl_pad" type="summit_xl_pad" args="load ps3.yaml" / --> 
+  
+</launch>
+

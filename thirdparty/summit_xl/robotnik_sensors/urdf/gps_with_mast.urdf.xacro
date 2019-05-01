@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<robot name="sensor_gps_with_mast" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:property name="mast_height" value="0.5" /> 
+  <xacro:property name="mast_radius" value="0.010" />
+		
+  <xacro:macro name="sensor_gps_with_mast" params="name parent *origin">
+	      
+	  <!-- MAST OF THE ANTENNA GPS -->
+	  <joint name="${name}_joint" type="fixed">
+	    <axis xyz="0 1 0"/>
+	    <xacro:insert_block name="origin"/>
+	    <parent link="${parent}"/>
+	    <child link="${name}_mast_link"/>
+	  </joint>
+	  
+	  <link name="${name}_mast_link">
+	    <inertial>
+	      <mass value="0.001"/>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.000001" iyz="0" izz="0.0001"/>
+	    </inertial>
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <material name="mast_color">
+            <color rgba="0.1 0.1 0.1 1"/>          
+          </material>
+	      <geometry>
+	        <cylinder length="${mast_height}" radius="${mast_radius}" />
+	      </geometry>
+	    </visual>
+	    <collision>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+	        <cylinder length="${mast_height}" radius="${mast_radius}" />
+	      </geometry>
+	    </collision>
+	  </link>
+
+	  <joint name="mast_joint" type="fixed">
+	    <axis xyz="0 1 0"/>
+	    <parent link="${name}_mast_link"/>
+	    <child link="${name}_link"/>
+	    <origin xyz="0 0 ${mast_height/2.0}" rpy="0 0 0" />  
+	  </joint>
+
+	  <gazebo reference="${name}_mast_link">
+	    <material>Gazebo/Black</material>
+	    <gravity>true</gravity>
+	  </gazebo>
+
+      <!-- ANTENNA GPS -->
+	  <link name="${name}_link">
+	    <inertial>
+	      <mass value="0.001"/>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.000001" iyz="0" izz="0.0001"/>
+	    </inertial>
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <material name="gps_color">
+           <color rgba="1 1 1 1"/>
+        </material>
+	      <geometry>
+	        <mesh filename="package://robotnik_sensors/meshes/antenna_3GO16.stl" scale="1.0 1.0 1.0"/>
+	      </geometry>
+	    </visual>
+	    <collision>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+	        <mesh filename="package://robotnik_sensors/meshes/antenna_3GO16.stl" scale="1.0 1.0 1.0"/>
+	      </geometry>
+	    </collision>
+	  </link>
+    
+    
+	  <gazebo reference="${name}_link">
+	    <material>Gazebo/White</material>
+	    <gravity>true</gravity>
+	  </gazebo>
+  
+    <gazebo>
+      <plugin name="${name}_link" filename="libhector_gazebo_ros_gps.so">
+        <alwaysOn>1</alwaysOn>
+				<updateRate>10.0</updateRate>
+				<bodyName>base_footprint</bodyName>
+				<topicName>fix</topicName>
+				<velocityTopicName>fix_velocity</velocityTopicName>
+				<drift>5.0 5.0 5.0</drift>
+				<gaussianNoise>0.1 0.1 0.1</gaussianNoise>
+				<velocityDrift>0 0 0</velocityDrift>
+				<velocityGaussianNoise>0.1 0.1 0.1</velocityGaussianNoise>
+      </plugin>
+		</gazebo>
+    
+  </xacro:macro>
+
+</robot>

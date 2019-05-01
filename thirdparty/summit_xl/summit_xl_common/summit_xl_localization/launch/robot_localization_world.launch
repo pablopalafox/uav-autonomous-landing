@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<launch>
+
+ <!-- ekf_loc2 fuses all surces of data (imu, odometry and gps odom). Publish the tf from world frame to base_footprintt -->
+    <node pkg="robot_localization" type="ekf_localization_node" name="ekf_loc2" clear_params="true" output="screen">
+      <remap from="odometry/filtered" to="/odometry/filtered_world" />
+
+      <!-- GPS update frequency: 10 Hz-->
+      <param name="frequency" value="10"/>
+      <param name="sensor_timeout" value="0.1"/>
+
+      <param name="two_d_mode" value="true"/>
+
+      <param name="map_frame" value="world"/>
+      <param name="odom_frame" value="odom"/>
+      <param name="base_link_frame" value="base_footprint"/>
+      <param name="world_frame" value="world"/>
+
+      <param name="odom0" value="/odom"/>
+      <param name="imu0" value="/mavros/imu/data"/>
+
+      <rosparam param="odom0_config">[true, true, false,
+                                      false, false, true,
+                                      true,  false, false,
+                                      false, false, true,
+                                      false, false, false]</rosparam>
+
+      <rosparam param="imu0_config">[false, false, false,
+                                     false, false, false,
+                                     false, false, false,
+                                     true, true, true,
+                                     false, false, false]</rosparam>
+
+      <param name="odom0_differential" value="true"/>
+      <param name="imu0_differential" value="false"/>
+
+      <param name="odom0_relative" value="false"/>
+      <param name="imu0_relative" value="false"/>
+
+      <!-- GPS odometry (from navsat_transform_node) -->
+      <param name="odom1" value="odometry/gps"/>
+      <rosparam param="odom1_config">[true, true, true,
+                                      false, false, false,
+                                      false, false, false,
+                                      false, false, false,
+                                      false, false, false]</rosparam>
+                                                                                                                                                                                                                                                         
+      <param name="odom1_differential" value="false"/>
+      <param name="odom1_relative" value="false"/>
+
+      <param name="imu0_remove_gravitational_acceleration" value="true"/>
+      <param name="print_diagnostics" value="false"/>
+   </node>
+
+</launch>
+
+

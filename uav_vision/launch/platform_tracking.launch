@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+
+<launch>
+
+    <include file="$(find uav_vision)/launch/platform_detection.launch" />
+
+	<node name="platform_tracking" pkg="uav_vision" type="platform_tracking" output="screen">
+        <param name="verbose" value="true" />
+        <param name="use_prediction_" value="false"/>
+        <param name="cmd_vel_pub_freq" value="100" />
+
+        <param name="manual_gains" value="true" />
+        <!-- if set to true, we get a trackbar and can vary the gains during simulation -->
+        <!-- if set to false, we compute them depending on the altitude at every instant -->
+
+        <!-- PID gains at 4 meters of altitude -->
+        <param name="Kp" value="0.42"/>
+        <param name="Ki" value="0.01"/>
+        <param name="Kd" value="0.01"/>
+
+        <!-- PID gains at altitude 0 -->
+        <param name="Kp_min" value="0.59524"/>
+        <param name="Ki_min" value="0.94500"/>
+        <param name="Kd_min" value="0.94500"/>
+
+        <!-- coefficients used in the decreasing exponential for the height-adaptive PID gains -->
+        <param name="exp_coeff_Kp" value="0.0871767"/>
+        <param name="exp_coeff_Ki" value="0.2027326"/>
+        <param name="exp_coeff_Kd" value="0.2027326"/>
+
+        <param name="TRACKING_ALTITUDE" value="4.0"/>
+        <param name="MARGIN_TRACKING_ALTITUDE" value="0.2"/>
+
+        <!--TOPICS-->
+        <param name="cmd_vel_topic" value="/ardrone/cmd_vel"/>
+
+        <param name="platform_position_in_ardrone_topic" value="/platform/current_platform_position_in_ardrone"/>
+        <param name="predicted_platform_path_in_world_topic" value="/kalman_prediction_path" />
+        <param name="indicator_position_in_ardrone_topic" value="/platform/current_indicator_position_in_ardrone"/>
+
+        <param name="sonar_topic" value="/ardrone/sonar_height"/>  
+        <param name="altimeter_topic" value="/ardrone/altimeter"/>
+        <param name="gt_altitude_topic" value="/ardrone/groundtruth_altitude"/>  
+        <param name="ardrone_navdata" value="/ardrone/navdata"/>  
+
+    </node>
+
+   <include file="$(find takeoff)/launch/ardrone_teleop.launch" />
+
+</launch>

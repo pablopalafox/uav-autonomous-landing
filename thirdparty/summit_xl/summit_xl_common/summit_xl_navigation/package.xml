@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package>
+  <name>summit_xl_navigation</name>
+  <version>1.0.0</version>
+  <description> Navigation launch and config files for Summit XL robot. </description>
+
+  <url type="website">http://ros.org/wiki/summit_xl_navigation</url>
+  <url type="bugtracker">https://github.com/RobotnikAutomation/summit_xl_common/issues</url>
+
+  <author email="dcarbonell@robotnik.es">Dani Carbonell</author>  
+
+  <maintainer email="dcarbonell@robotnik.es">Dani Carbonell</maintainer>
+ 
+  <license>BSD</license>
+  
+  <buildtool_depend>catkin</buildtool_depend>
+  
+  <run_depend>navigation</run_depend>
+  <run_depend>gmapping</run_depend>
+  
+</package>
+
+
+

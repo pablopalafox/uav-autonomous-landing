@@ -1,0 +1,137 @@
+<?xml version="1.0"?>
+<robot name="sensor_fotonic" xmlns:xacro="http://ros.org/wiki/xacro">
+	
+	
+	
+  <xacro:macro name="sensor_fotonic" params="name parent *origin">
+    
+    <joint name="${name}_joint" type="fixed">
+			<xacro:insert_block name="origin"/>
+      <parent link="${parent}"/>
+      <child link="${name}_link"/>
+	  </joint>
+	
+	  <link name="${name}_link">
+	    <inertial>
+				<origin xyz="-0.275 0 -0.260" rpy="0 0 0" />
+	      <mass value="0.0001" />
+	      <origin xyz="0 0 0" />
+	      <inertia ixx="0.0001" ixy="0.0" ixz="0.0"
+	               iyy="0.0001" iyz="0.0" 
+	               izz="0.0001" />
+	    </inertial>
+	    <visual>
+	      <origin xyz="-0.275 0 -0.260" rpy="0 0 0" /> <!-- to center the .dae model -->
+	      <material name="fotonic_color">
+           <color rgba="0.5 0.5 0.5 1"/>
+        </material>
+	      <geometry>
+					<mesh filename= "package://robotnik_sensors/meshes/fotonic.stl" scale="1.0 1.0 1.0"/>
+	      </geometry>
+	    </visual>
+	    <collision>
+	      <origin xyz="-0.275 0 -0.260" rpy="0 0 0" />
+	      <geometry>
+					<mesh filename= "package://robotnik_sensors/meshes/fotonic.stl" scale="1.0 1.0 1.0"/>
+	      </geometry>
+	    </collision>
+	  </link>
+	
+	  <joint name="${name}_depth_joint" type="fixed">
+			<origin xyz="0 0 0" rpy="0 0 0" />
+	    <parent link="${name}_link" />
+	    <child link="${name}_depth_frame" />
+	  </joint>
+	
+	  <link name="${name}_depth_frame">
+	    <inertial>
+	      <mass value="0.0001" />
+	      <origin xyz="0 0 0" />
+	      <inertia ixx="0.0001" ixy="0.0" ixz="0.0"
+	               iyy="0.0001" iyz="0.0" 
+	               izz="0.0001" />
+	    </inertial>
+	  </link>
+	
+	  <joint name="${name}_depth_optical_joint" type="fixed">
+	    <origin xyz="0 0 0" rpy="-1.5708 0 -1.5708" />
+	    <parent link="${name}_depth_frame" />
+	    <child link="${name}_depth_optical_frame" />
+	  </joint>
+	
+	  <link name="${name}_depth_optical_frame">
+	    <inertial>
+	      <mass value="0.0001" />
+	      <origin xyz="0 0 0" />
+	      <inertia ixx="0.0001" ixy="0.0" ixz="0.0"
+	               iyy="0.0001" iyz="0.0" 
+	               izz="0.0001" />
+	    </inertial>
+	  </link>
+	
+
+		<!-- Fotonic sensor for simulation -->
+		<sensor_fotonic_gazebo/>
+		
+  </xacro:macro>
+  
+    
+    
+    
+  <xacro:macro name="sensor_fotonic_gazebo">
+		
+		<gazebo reference="${name}_link">
+      <material>Gazebo/Grey</material>
+    </gazebo>
+		
+    <gazebo reference="${name}_depth_frame">
+	    <sensor type="depth" name="fotonic">
+	      <update_rate>30.0</update_rate>
+	      <camera name="fotonic">
+	        <horizontal_fov>1.221730476</horizontal_fov>  <!-- 70 deg -->
+	        <image>
+	          <width>800</width>  <!-- 160 -->
+	          <height>600</height> <!-- 120 -->
+	          <format>R8G8B8</format>
+	        </image>
+	        <clip>
+	          <near>0.05</near>
+	          <far>7.0</far>         <!-- outdoor down to 3m depending on luminosity -->
+	        </clip>
+	        <noise>
+	          <type>gaussian</type>
+	          <mean>0.0</mean>
+	          <stddev>0.007</stddev>
+	        </noise>
+	      </camera>
+	      
+		    <plugin name="kinect_depth_optical_frame_controller" filename="libgazebo_ros_openni_kinect.so">
+					<baseline>0.2</baseline>
+					<alwaysOn>true</alwaysOn>
+					<updateRate>1.0</updateRate>
+					<cameraName>${name}</cameraName>
+					<imageTopicName>fotonic_3dcamera/image_raw</imageTopicName>
+					<cameraInfoTopicName>fotonic/depth/camera_info</cameraInfoTopicName>
+					<depthImageTopicName>fotonic/depth/image_raw</depthImageTopicName>
+					<depthImageInfoTopicName>fotonic_3dcamera/depth/camera_info</depthImageInfoTopicName>
+					<depthImageCameraInfoTopicName>fotonic_3dcamera/camera_info</depthImageCameraInfoTopicName>
+					<pointCloudTopicName>fotonic_3dcamera/depth/points</pointCloudTopicName>
+					<frameName>${name}_depth_optical_frame</frameName>
+					<pointCloudCutoff>0.5</pointCloudCutoff>
+					<distortionK1>0</distortionK1>
+					<distortionK2>0</distortionK2>
+					<distortionK3>0</distortionK3>
+					<distortionT1>0</distortionT1>
+					<distortionT2>0</distortionT2>
+					<CxPrime>0</CxPrime>
+					<Cx>0</Cx>
+					<Cy>0</Cy>
+					<focalLength>0</focalLength>
+					<hackBaseline>0</hackBaseline>
+			  </plugin>      
+	    </sensor>
+	  </gazebo>
+	  
+  </xacro:macro>
+  
+</robot>

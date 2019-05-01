@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<robot name="all_sensors" xmlns:xacro="http://ros.org/wiki/xacro">
+	
+	<!-- This file unifies all sensors that can be used on simulation, defined as xacro:macros -->
+
+  <!-- Axis p5512 -->  
+  <xacro:include filename="$(find robotnik_sensors)/urdf/axis.urdf.xacro" />  
+
+  <!-- Axis m5013 -->  
+  <xacro:include filename="$(find robotnik_sensors)/urdf/axis_m5013.urdf.xacro" />  
+	
+  <!-- Fotonic -->
+  <xacro:include filename="$(find robotnik_sensors)/urdf/fotonic.urdf.xacro" /> 
+	
+  <!-- GPS -->
+  <xacro:include filename="$(find robotnik_sensors)/urdf/gps.urdf.xacro" /> 
+	
+  <!-- Hokuyo urg04lx -->
+  <xacro:include filename="$(find robotnik_sensors)/urdf/hokuyo_urg04lx.urdf.xacro" />      
+ 
+  <!-- Hokuyo utm30lx -->
+  <xacro:include filename="$(find robotnik_sensors)/urdf/hokuyo_utm30lx.urdf.xacro" />  
+  
+  <!-- Hokuyo ust10lx -->
+  <xacro:include filename="$(find robotnik_sensors)/urdf/hokuyo_ust10lx.urdf.xacro" />  
+
+  <!-- Imu -->
+  <xacro:include filename="$(find robotnik_sensors)/urdf/imu.urdf.xacro" />  
+    
+  <!-- Kinect -->
+  <xacro:include filename="$(find robotnik_sensors)/urdf/kinect.urdf.xacro" /> 
+
+  <!-- Asus Xtion PRO -->
+  <xacro:include filename="$(find robotnik_sensors)/urdf/asus_xtion_pro.urdf.xacro" /> 
+  
+  <!-- Hokuyo 3d -->
+  <xacro:include filename="$(find robotnik_sensors)/urdf/hokuyo3d.urdf.xacro" /> 
+  
+  <!-- Sick s3000 -->
+  <xacro:include filename="$(find robotnik_sensors)/urdf/sick_s3000.urdf.xacro" /> 
+    
+  <!-- KinectV2 -->
+  <xacro:include filename="$(find robotnik_sensors)/urdf/kinectv2.urdf.xacro" /> 
+
+</robot>
