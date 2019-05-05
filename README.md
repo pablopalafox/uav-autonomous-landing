@@ -27,21 +27,30 @@ $ catkin_make
 $ source devel/setup.bash
 ```
 
+The followin instructions correspond to the simulated environment. (Documentation for the real environment will be released soon.)
 
-
-```bash
-$ chmod +x install_dependencies.sh
-$ ./install_dependencies.sh
-```
+Launch the world with both the UGV and the UAV:
 
 ```bash
-$ chmod +x install_dependencies.sh
-$ ./install_dependencies.sh
+$ roslaunch takeoff both.launch
 ```
 
+In a different terminal (don't forget to source the environment everytime you open a new terminal by using `cd ws && source devel/setup.bash`), launch the detection and tracking modules:
+
 ```bash
-$ chmod +x install_dependencies.sh
-$ ./install_dependencies.sh
+$ roslaunch uav_vision detection_tracking.launch
 ```
+
+Now you can start moving the Summit (UGV) by launching the corresponding node `summit_moves`:
+
+```bash
+$ roslaunch summit_moves summit_moves.launch
+```
+
+### 
 
 ## 3. License
+
+Libraries within `thirdparty` are released with their own license.
+
+The rest of the code in this repository is released under an [MIT License](LICENSE). 

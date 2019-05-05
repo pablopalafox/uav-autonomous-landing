@@ -2,8 +2,6 @@
 
 <launch>
 
-    <include file="$(find uav_vision)/launch/platform_detection.launch" />
-
 	<node name="platform_tracking" pkg="uav_vision" type="platform_tracking" output="screen">
         <param name="verbose" value="true" />
         <param name="use_prediction_" value="false"/>

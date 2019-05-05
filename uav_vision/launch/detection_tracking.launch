@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+
+<launch>
+
+  	<include file="$(find uav_vision)/launch/platform_detection.launch" />
+
+	<include file="$(find uav_vision)/launch/platform_tracking.launch" />
+
+</launch>
