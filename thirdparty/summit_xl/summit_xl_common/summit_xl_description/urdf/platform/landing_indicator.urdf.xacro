@@ -2,8 +2,8 @@
 <robot name="landing_indicator" xmlns:xacro="http://www.ros.org/wiki/xacro">
  
   <!-- indicator -->
-  <xacro:property name="indicator_length_x" value="0.3" />
-  <xacro:property name="indicator_width_y" value="0.8" />  
+  <xacro:property name="indicator_length_x" value="0.2" />
+  <xacro:property name="indicator_width_y" value="1.0" />  
   <xacro:property name="indicator_height_z" value="0.01" />
   <xacro:property name="indicator_mass" value="0.2" /> <!-- in kg-->
  

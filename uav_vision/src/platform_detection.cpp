@@ -291,6 +291,7 @@ void PlatformDetection::inputImageCallback(const sensor_msgs::ImageConstPtr& raw
     computeCentroidOrIndicator("centroid");
     computeCentroidOrIndicator("indicator");
 
+
     cv::imshow("platform_DETECTED", image_display_);
     cv::waitKey(1);
 }
@@ -367,6 +368,10 @@ void PlatformDetection::computeCentroidOrIndicator(const std::string& type) {
         double centroid_x_in_cam = ((mc.x - cx_) * z_dist_to_platform_ - (T_ * (mc.y - cy_) * z_dist_to_platform_) / fy_) / fx_;
         double centroid_y_in_cam = ((mc.y - cy_) * z_dist_to_platform_) / fy_;
         double centroid_z_in_cam = z_dist_to_platform_;
+
+        if (std::isnan(centroid_x_in_cam) || std::isnan(centroid_y_in_cam) || std::isnan(centroid_z_in_cam)) {
+            return;
+        }
 
         position_in_camera_ = tf::Vector3(centroid_x_in_cam, centroid_y_in_cam, centroid_z_in_cam);
 

@@ -12,7 +12,7 @@
         <!-- id of the path we want to predict -->
         <param name="path_id" value="1" />
         <!-- For a given path, time between predictions -->
-        <param name="time_step" value="0.5" />
+        <param name="time_step" value="1.0" />
         <!-- Maximum predicted time for the given path -->
         <param name="path_time" value="2.0" />
 

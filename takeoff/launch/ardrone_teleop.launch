@@ -3,7 +3,7 @@
 <launch>
     <node pkg="joy" type="joy_node" name="joy_node" output="screen">
 	    <param name="autorepeat_rate" value="10" />
-		<param name="dev" value="/dev/input/js1" />
+		<param name="dev" value="/dev/input/js0" />
     </node>
     
     <node pkg="takeoff" type="ardrone_teleop" name="ardrone_joystick" output="screen" />

@@ -3,18 +3,18 @@
 <launch>
 
 	<node name="platform_tracking" pkg="uav_vision" type="platform_tracking" output="screen">
-        <param name="verbose" value="true" />
+        <param name="verbose" value="false" />
         <param name="use_prediction_" value="false"/>
-        <param name="cmd_vel_pub_freq" value="100" />
+        <param name="cmd_vel_pub_freq" value="200" />
 
         <param name="manual_gains" value="true" />
         <!-- if set to true, we get a trackbar and can vary the gains during simulation -->
         <!-- if set to false, we compute them depending on the altitude at every instant -->
 
         <!-- PID gains at 4 meters of altitude -->
-        <param name="Kp" value="0.42"/>
-        <param name="Ki" value="0.01"/>
-        <param name="Kd" value="0.01"/>
+        <param name="Kp" value="0.579"/>
+        <param name="Ki" value="0.0105"/>
+        <param name="Kd" value="0.0117"/>
 
         <!-- PID gains at altitude 0 -->
         <param name="Kp_min" value="0.59524"/>

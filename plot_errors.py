@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import os
 
-errors = pd.read_csv("/home/pablo/ws/log/errors/errors_test_0.csv")
+errors = pd.read_csv("/home/pablo/ws/log/errors/errors_test.csv")
 #errors = pd.read_csv("/home/pablo/.ros/errors.csv")
 
 # create log dir if it does not exist yet
