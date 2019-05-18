@@ -337,6 +337,8 @@ void GazeboQuadrotorSimpleController::Update()
 //    lastDebugOutput = last_time.Double();
 //  }
 
+  // -ROS_INFO_STREAM("Nav state: " << navi_state);
+
   // process robot state information
   if (navi_state == LANDED_MODEL)
   {
@@ -349,13 +351,13 @@ void GazeboQuadrotorSimpleController::Update()
   }
   else if (navi_state == TAKINGOFF_MODEL)
   {
-    link->AddRelativeForce(force * 1.5);
-    link->AddRelativeTorque(torque * 1.5);
+    link->AddRelativeForce(force * 1.2);
+    link->AddRelativeTorque(torque * 1.2);
   }
   else if (navi_state == LANDING_MODEL)
   {
-    link->AddRelativeForce(force * 0.8);
-    link->AddRelativeTorque(torque * 0.8);
+    link->AddRelativeForce(force * 1.1);
+    link->AddRelativeTorque(torque * 1.1);
   }
 
   // save last time stamp

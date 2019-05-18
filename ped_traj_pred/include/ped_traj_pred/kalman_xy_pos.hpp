@@ -55,10 +55,13 @@ public:
     void initializeFilter(NEWMAT::ColumnVector init_position);
 
     /// Stores the current state of the filter
-    NEWMAT::ColumnVector x;
+    NEWMAT::ColumnVector x_;
 
     /// Used for the prediction steps
-    NEWMAT::ColumnVector x_pred;
+    NEWMAT::ColumnVector x_pred_;
+
+    /// Stores a previous observation.
+    NEWMAT::ColumnVector z0_;
 
     /**
      * Covariance Matrix P.
@@ -66,10 +69,10 @@ public:
      * Down the diagonal of P, we find the variances of the elements of x.
      */
 
-    NEWMAT::Matrix P;
+    NEWMAT::Matrix P_;
 
     /// Covariance matrix used for the prediction steps
-    NEWMAT::Matrix P_pred;
+    NEWMAT::Matrix P_pred_;
 
     /// whether or not the object is moving.
     bool not_moving;
@@ -113,9 +116,6 @@ private:
 
     /// Difference between the observation and the kalman filter prediction.
     NEWMAT::ColumnVector y;
-
-    /// Stores a previous observation.
-    NEWMAT::ColumnVector z0;
 
     void computeProcessNoiseCovariance();
 };

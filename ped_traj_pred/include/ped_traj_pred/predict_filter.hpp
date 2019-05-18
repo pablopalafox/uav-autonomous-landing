@@ -16,7 +16,8 @@ public:
     PredictFilter();
     ~PredictFilter();
 
-    void publishSpin(const ros::TimerEvent& e);
+    // void publishSpin(const ros::TimerEvent& e);
+    void publishPred(float pos_x, float pos_y, float pos_z);
     void refreshPos(float pos_x, float pos_y);
 
     bool filter_initialized;

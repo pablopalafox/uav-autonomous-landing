@@ -53,24 +53,26 @@ PredictFilter::PredictFilter() {   //Constructor
 
     nh.param("pub_freq", pub_freq, 1.0);
     nh.param("path_time", path_time, 6.0);
-    num_pos = (int) (path_time / time_step);
+    num_pos = (int) (path_time / time_step) + 1; // +1 to account for current position
 
     ROS_INFO("[PredictFilter] -- Advertise topics ");
     ROS_INFO("[PredictFilter] -- path_time: %f", path_time);
     ROS_INFO("[PredictFilter] -- time_step: %f", time_step);
     ROS_INFO("[PredictFilter] -- num_pos:   %d", num_pos);
 
-    publish_timer = nh.createTimer(ros::Duration(1.0 / pub_freq), &PredictFilter::publishSpin, this);
-    publish_timer.stop();
+    // publish_timer = nh.createTimer(ros::Duration(1.0 / pub_freq), &PredictFilter::publishSpin, this);
+    // publish_timer.stop();
 
     ROS_INFO("[PredictFilter] -- Init oK");
 }
 
 PredictFilter::~PredictFilter() {}
 
-void PredictFilter::publishSpin(const ros::TimerEvent& e) {
+// void PredictFilter::publishSpin(const ros::TimerEvent& e) {
+void PredictFilter::publishPred(float pos_x, float pos_y, float pos_z) {
 
-    ROS_INFO("os::time %f - Predicting...", ros::Time::now().toSec());
+    ROS_INFO("ros::time %f", ros::Time::now().toSec());
+    // ROS_INFO("x: %f - y: %f ...", pos_x, pos_y);
 
     // POSESTAMPED
     // geometry_msgs::PoseWithCovarianceStamped pos_with_cov;
@@ -92,8 +94,8 @@ void PredictFilter::publishSpin(const ros::TimerEvent& e) {
     // line_strip.points.clear();
 
     // We obtain the value of the path's first measurement like so:
-    x_pred = x;
-    P_pred = P;
+    x_pred_ = x_;
+    P_pred_ = P_;
 
     ros::Time estimation_stamp = ros::Time::now();
 
@@ -101,13 +103,27 @@ void PredictFilter::publishSpin(const ros::TimerEvent& e) {
     for (unsigned int pos_counter = 0; pos_counter <= num_pos ; pos_counter++) {
         if (pos_counter < num_pos) {
 
-            estimation_stamp += ros::Duration(time_step);
-            predictPred();
-            correctPred();
+            // Path
+            geometry_msgs::PoseStamped pose_at_x;
+            pose_at_x.header.stamp = estimation_stamp;
+            pose_at_x.header.frame_id = output_frame_id;
+            pose_at_x.pose.orientation.w = 1;
+            pose_at_x.pose.position.z = pos_z;
+            if (pos_counter == 0) {
+                // first element of the path will be the measured position
+                pose_at_x.pose.position.x = z0_.element(0); // this could be pos_x
+                pose_at_x.pose.position.y = z0_.element(1); // this could be pos_y
+            } else {
+                estimation_stamp += ros::Duration(time_step);
+                predictPred();
+                correctPred();
+                pose_at_x.pose.position.x = x_pred_.element(0);
+                pose_at_x.pose.position.y = x_pred_.element(1);
+            }
 
             // visualizations
-            // mark.x = x_pred.element(0);
-            // mark.y = x_pred.element(1);
+            // mark.x = x_pred_.element(0);
+            // mark.y = x_pred_.element(1);
             // mark.z = 0;
             // points.points.push_back(mark);
             // line_strip.points.push_back(mark);
@@ -117,19 +133,17 @@ void PredictFilter::publishSpin(const ros::TimerEvent& e) {
 
             // PoseStamped
             // pos_with_cov.header.stamp += ros::Duration(time_step);
-            // pos_with_cov.pose.pose.position.x = x_pred.element(0);
-            // pos_with_cov.pose.pose.position.y = x_pred.element(1);
+            // pos_with_cov.pose.pose.position.x = x_pred_.element(0);
+            // pos_with_cov.pose.pose.position.y = x_pred_.element(1);
             // future_pos_pub.publish(pos_with_cov); // publish future position
 
-            // Path
-            geometry_msgs::PoseStamped pose_at_x;
-            pose_at_x.header.stamp = estimation_stamp;
-            pose_at_x.header.frame_id = output_frame_id;
-            pose_at_x.pose.orientation.w = 1;
-            pose_at_x.pose.position.x = x_pred.element(0);
-            pose_at_x.pose.position.y = x_pred.element(1);
-
-            ROS_INFO("[%d] x_pred: %f - y_pred: %f", pos_counter, x_pred.element(0), x_pred.element(1));
+            ROS_INFO("[%d] x_pred: %f - y_pred: %f",
+                     pos_counter,
+                     pose_at_x.pose.position.x,
+                     pose_at_x.pose.position.y);
+            ROS_INFO("[%d] x_gt:   %f",
+                     pos_counter,
+                     z0_.element(0) + (time_step * pos_counter) * 0.5); // 0.15 m/s of summit (just for debugging)
 
             kal_path.path.poses[pos_counter] = pose_at_x;
         }
@@ -146,7 +160,7 @@ void PredictFilter::refreshPos(float pos_x, float pos_y) {
     z.element(0) = pos_x;
     z.element(1) = pos_y;
 
-    if ( filter_initialized == true) {
+    if (filter_initialized) {
         predict();
         update(z);
         correct();

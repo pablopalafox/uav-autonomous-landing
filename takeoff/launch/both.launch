@@ -40,7 +40,7 @@
            
     <!-- Call a python script to the run a service call to gazebo_ros to spawn a URDF robot -->
     <arg name="x" default="0"/>
-    <arg name="y" default="0"/>
+    <arg name="y" default="2.0"/>
     <arg name="z" default="0"/>
     <arg name="R" default="0"/>
     <arg name="P" default="0"/>
@@ -75,6 +75,10 @@
     <arg name="model" value="$(find cvg_sim_gazebo)/urdf/quadrotor_sensors.urdf.xacro"/>
   </include>
 
+  <!-- Groundtruth state publisher -->
   <node name="gt_altitude_ardrone" pkg="takeoff" type="robot_state_broadcaster" />
+
+  <!-- Summit moves -->
+  <include file="$(find summit_moves)/launch/summit_moves.launch" />
 
 </launch>

@@ -266,11 +266,11 @@ void PlatformDetection::inputImageCallback(const sensor_msgs::ImageConstPtr& raw
     // ROS_INFO_STREAM("angle_x " << angle_x_ << " - angle_y " << angle_y_);
     // ROS_INFO_STREAM(PI / 36);
 
-    if ( fabs(angle_x_) >= PI / 36 || fabs(angle_y_) >= PI / 36)
+    if ( fabs(angle_x_) >= PI / 45.0 || fabs(angle_y_) >= PI / 45.0)
         return;
 
-    if (sonar_range_ < 0.05)
-        return;
+    /*if (sonar_range_ < 0.05)
+        return;*/
 
     // get time stamp for frame
     stamp_ = ros::Time::now();

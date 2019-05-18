@@ -17,10 +17,12 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *************************************************************************/
 
-#include <ros/ros.h>
-#include <ros/xmlrpc_manager.h>
 #include <csignal>
 #include <random>
+
+#include <ros/ros.h>
+#include <ros/xmlrpc_manager.h>
+#include <std_msgs/Empty.h>
 
 #include <geometry_msgs/Twist.h>
 
@@ -61,6 +63,9 @@ class SummitMoves {
 public:
     ros::NodeHandle nh_;
 
+    bool start = false;
+
+    ros::Subscriber takeoff_sub_;
     ros::Publisher vel_pub;
     geometry_msgs::Twist twist;
 
@@ -80,6 +85,8 @@ public:
     SummitMoves();
     double doTrajectory();
 
+    void takeoffCallback(const std_msgs::EmptyConstPtr &takeoff_signal);
+
     void stop(double interval);
     void advance(double interval);
     void reverse(double interval);
@@ -96,6 +103,7 @@ SummitMoves::SummitMoves() {
 
     ros::NodeHandle nh_private_("~");
 
+    takeoff_sub_ = nh_.subscribe("/ardrone/takeoff", 1, &SummitMoves::takeoffCallback, this);
     vel_pub = nh_.advertise<geometry_msgs::Twist>("/summit_xl_control/cmd_vel", 10);
 
     nh_private_.getParam("max_linear_speed_x", max_linear_speed_x);
@@ -109,6 +117,11 @@ SummitMoves::SummitMoves() {
     unif_interval = std::uniform_real_distribution<double>(0.0, 10.0);
     unif_linear_x = std::uniform_real_distribution<double>(-max_linear_speed_x, max_linear_speed_x);
     unif_yaw      = std::uniform_real_distribution<double>(-max_yaw, max_yaw);
+}
+
+void SummitMoves::takeoffCallback(const std_msgs::EmptyConstPtr & takeoff_signal) {
+    ROS_INFO("Starting!");
+    start = true;
 }
 
 double SummitMoves::doTrajectory() {
@@ -170,12 +183,15 @@ double SummitMoves::yawLeft90() {
 }
 
 double SummitMoves::doBackAndForth() {
-    double interval = side_square / max_linear_speed_x;
+    double interval;
     if (advancing) {
+        interval = side_square / max_linear_speed_x;
         stop(0.2);
         advance(interval);
     }
     else {
+        interval = side_square / max_linear_speed_x;
+        interval;
         stop(0.2);
         reverse(interval);
     }
@@ -232,6 +248,14 @@ int main(int argc, char **argv)
     ros::XMLRPCManager::instance()->bind("shutdown", shutdownCallback);
 
     double sleep_for_seconds = 0.5;
+
+    while (!summit_moves.start) {
+        ROS_INFO("Waiting for start signal...");
+        usleep(sleep_for_seconds * 1000000); // in microseconds
+        ros::spinOnce();
+    }
+
+    ROS_INFO("Let's move...");
 
     while (!g_request_shutdown) {
         usleep(sleep_for_seconds * 1000000); // in microseconds

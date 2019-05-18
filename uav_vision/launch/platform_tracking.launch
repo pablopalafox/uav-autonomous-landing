@@ -3,9 +3,13 @@
 <launch>
 
 	<node name="platform_tracking" pkg="uav_vision" type="platform_tracking" output="screen">
-        <param name="verbose" value="false" />
+        <param name="verbose" value="true" />
         <param name="use_prediction_" value="false"/>
-        <param name="cmd_vel_pub_freq" value="200" />
+        <param name="cmd_vel_pub_freq" value="100" />
+        <param name="adapt_path_idx" value="true" /> <!-- whether to update the path idx when closer to the platform -->
+        <param name="MISSION_DURATION" value="-1" />
+
+        <param name="MAX_ALLOWED_TIME_WITHOUT_SEEING" value="1.0" />
 
         <param name="manual_gains" value="true" />
         <!-- if set to true, we get a trackbar and can vary the gains during simulation -->
@@ -13,13 +17,16 @@
 
         <!-- PID gains at 4 meters of altitude -->
         <param name="Kp" value="0.579"/>
-        <param name="Ki" value="0.0105"/>
-        <param name="Kd" value="0.0117"/>
+        <param name="Ki" value="0.0987"/>
+        <param name="Kd" value="0.0828"/>
+        <!-- <param name="Kp" value="0.33"/>
+        <param name="Ki" value="0.02"/>
+        <param name="Kd" value="0.0117"/> -->
 
         <!-- PID gains at altitude 0 -->
-        <param name="Kp_min" value="0.59524"/>
-        <param name="Ki_min" value="0.94500"/>
-        <param name="Kd_min" value="0.94500"/>
+        <param name="Kp_min" value="0.69524"/>
+        <param name="Ki_min" value="0.24500"/>
+        <param name="Kd_min" value="0.24500"/>
 
         <!-- coefficients used in the decreasing exponential for the height-adaptive PID gains -->
         <param name="exp_coeff_Kp" value="0.0871767"/>

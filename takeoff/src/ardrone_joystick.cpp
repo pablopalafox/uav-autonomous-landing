@@ -18,10 +18,10 @@
 #include "std_msgs/Empty.h"
 #include "std_srvs/Empty.h"
 
-const int PUBLISH_FREQ = 50;
-const float MAX_LINEAR_SPEED = 3.0;
-const float MAX_YAW_SPEED = 2.0;
-const float INCR_SPEED = 0.2;
+constexpr int PUBLISH_FREQ = 50;
+constexpr double MAX_LINEAR_SPEED = 3.0;
+constexpr double MAX_YAW_SPEED = 2.0;
+constexpr double INCR_SPEED = 0.2;
 
 using namespace std;
 
@@ -40,8 +40,8 @@ struct TeleopArDrone
     geometry_msgs::Twist twist;
     ros::ServiceClient srv_cl_cam;
 
-    float scale_linear;
-    float scale_yaw;
+    double scale_linear;
+    double scale_yaw;
 
     void joyCb(const sensor_msgs::JoyConstPtr joy_msg) {
 
@@ -55,7 +55,7 @@ struct TeleopArDrone
         }
 
         // mapping from joystick to velocity
-        float scale = 1;
+        double scale = 1;
 
         // button 2 (triangle): augment linear scale
         bool speed_up = joy_msg->buttons.at(2);
@@ -84,7 +84,7 @@ struct TeleopArDrone
         // button 5 (R1): dead man switch
         bool land_pressed = joy_msg->buttons.at(5);
 
-        // button 7 (R2): 
+        // button 7 (R2):
         bool force_land_pressed = joy_msg->buttons.at(7);
 
         // button 9 (start): switch emergency state
@@ -115,13 +115,14 @@ struct TeleopArDrone
         }
         toggle_pressed_in_last_msg = emergency_toggle_pressed;
 
-
         if (!cam_toggle_pressed_in_last_msg && cam_toggle_pressed) {
             ROS_INFO("Changing Camera");
-            if (!srv_cl_cam.call(srv_empty))  
+            if (!srv_cl_cam.call(srv_empty)) {
                 ROS_INFO("Failed to toggle Camera");
+            }
         }
         cam_toggle_pressed_in_last_msg = cam_toggle_pressed;
+
     }
 
     TeleopArDrone() {

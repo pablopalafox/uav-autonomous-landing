@@ -40,13 +40,12 @@ void PedTrajPred::posCallback(const geometry_msgs::PoseStampedConstPtr& pos) {
     double time_callback;
     time_callback = pos->header.stamp.toSec();
 
-    // ROS_INFO("%f", predict_filter->getTimeStep());
-
-    // if (time_callback - t_prev_measure < predict_filter->getTimeStep()) {
-    //     return;
-    // }
+    if (time_callback - t_prev_measure < predict_filter->getTimeStep()) {
+        return;
+    }
 
     predict_filter->refreshPos(pos->pose.position.x, pos->pose.position.y);
+    predict_filter->publishPred(pos->pose.position.x, pos->pose.position.y, pos->pose.position.z);
     t_prev_measure = time_callback;
 }
 
@@ -68,7 +67,13 @@ void PedTrajPred::posCovCallback(const geometry_msgs::PoseWithCovarianceStampedC
     predict_filter->output_frame_id = posCov->header.frame_id;
     double time_callback;
     time_callback = posCov->header.stamp.toSec();
+
+    if (time_callback - t_prev_measure < predict_filter->getTimeStep()) {
+        return;
+    }
+
     predict_filter->refreshPos(posCov->pose.pose.position.x, posCov->pose.pose.position.y);
+    t_prev_measure = time_callback;
 }
 
 int main(int argc, char **argv) {

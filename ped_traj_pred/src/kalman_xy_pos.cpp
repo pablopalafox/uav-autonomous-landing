@@ -10,7 +10,7 @@ KalmanXYPos::KalmanXYPos() {
 
     nh_in.param("model_covariance", model_covariance, 2.0);
     nh_in.param("observation_covariance", observation_covariance, 1.0);
-    
+
     nh_in.param("time_step", time_step, 0.5);
 
     state_vec_size = 4;
@@ -20,11 +20,11 @@ KalmanXYPos::KalmanXYPos() {
 
     // Process error covariance
     // (measure of the estimated accuracy of the state estimate)
-    P = Matrix(state_vec_size, state_vec_size);
-    P_pred = Matrix(state_vec_size, state_vec_size);
+    P_ = Matrix(state_vec_size, state_vec_size);
+    P_pred_ = Matrix(state_vec_size, state_vec_size);
 
-    P = I;
-    P_pred = I;
+    P_ = I;
+    P_pred_ = I;
 
     // kalman gain
     K = Matrix(state_vec_size, observation_vec_size);
@@ -84,62 +84,62 @@ void KalmanXYPos::computeProcessNoiseCovariance() {
 }
 
 void KalmanXYPos::predict() {
-    P = A * P * A.t() + Q;
+    P_ = A * P_ * A.t() + Q;
     if (not_moving) return;
-    x = A * x;
+    x_ = A * x_;
 }
 
 void KalmanXYPos::update(ColumnVector z) {
     float modZ;
     Matrix S; // innovation covariance
 
-    modZ = (z - z0).NormFrobenius();
+    modZ = (z - z0_).NormFrobenius();
     if (modZ <= 0.01) {
         y << 0
           << 0;
         not_moving = true;
     }
     else {
-        y = z - H * x; // innovation
+        y = z - H * x_; // innovation
         not_moving = false;
     }
 
-    S = R + H * P * H.t();
-    K = P * H.t() * S.i();
+    S = R + H * P_ * H.t();
+    K = P_ * H.t() * S.i();
 
-    z0 = z;
+    z0_ = z;
 }
 
 void KalmanXYPos::correct() {
-    x = x + K * y;
-    P = (I - K * H) * P;
+    x_ = x_ + K * y;
+    P_ = (I - K * H) * P_;
 }
 
 void KalmanXYPos::predictPred() {
-    P_pred = A * P_pred * A.t() + Q;
+    P_pred_ = A * P_pred_ * A.t() + Q;
     if (not_moving) return;
-    x_pred = A * x_pred;
+    x_pred_ = A * x_pred_;
 }
 
 void KalmanXYPos::correctPred() {
-    x_pred = x_pred + K * y;
-    P_pred = (I - K * H) * P_pred;
+    x_pred_ = x_pred_ + K * y;
+    P_pred_ = (I - K * H) * P_pred_;
 }
 
 void KalmanXYPos::initializeFilter(ColumnVector z_initial)
 {
-    z0 = ColumnVector(2);
-    x = ColumnVector(4);
-    x_pred = ColumnVector(4);
+    z0_ = ColumnVector(2);
+    x_ = ColumnVector(4);
+    x_pred_ = ColumnVector(4);
 
-    z0 = z_initial;
-    x  << z_initial.element(0)
-       << z_initial.element(1)
-       << 0
-       << 0;
-    x_pred = x;
+    z0_ = z_initial;
+    x_  << z_initial.element(0)
+        << z_initial.element(1)
+        << 0
+        << 0;
+    x_pred_ = x_;
 
     ROS_INFO("[KALMAN XY POS - initializeFilter] Initial state x: %f, %f, %f, %f",
-             x.element(0), x.element(1),
-             x.element(2), x.element(3) );
+             x_.element(0), x_.element(1),
+             x_.element(2), x_.element(3) );
 }
