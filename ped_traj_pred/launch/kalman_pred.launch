@@ -12,16 +12,16 @@
         <!-- id of the path we want to predict -->
         <param name="path_id" value="1" />
         <!-- For a given path, time between predictions -->
-        <param name="time_step" value="0.2" />
+        <param name="time_step" value="0.1" />
         <!-- Maximum predicted time for the given path -->
-        <param name="path_time" value="1.0" />
+        <param name="path_time" value="0.1" />
 
         <!-- Rate at which we predict new paths -->
         <!-- at rate of 2 means we predict a new path every 0.5 seconds -->
         <param name="pub_freq" value="10" />
 
 
-        <param name="model_covariance" value="1.0" />
+        <param name="model_covariance" value="2.0" />
         <param name="observation_covariance" value="1.0" />
 
         <param name="future_path_topic" value="/kalman_prediction_path"/>

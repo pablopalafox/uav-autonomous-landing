@@ -53,17 +53,18 @@ PredictFilter::PredictFilter() {   //Constructor
 
     nh.param("pub_freq", pub_freq, 1.0);
     nh.param("path_time", path_time, 6.0);
-    num_pos = (int) (path_time / time_step) + 1; // +1 to account for current position
 
-    ROS_INFO("[PredictFilter] -- Advertise topics ");
     ROS_INFO("[PredictFilter] -- path_time: %f", path_time);
     ROS_INFO("[PredictFilter] -- time_step: %f", time_step);
-    ROS_INFO("[PredictFilter] -- num_pos:   %d", num_pos);
+
+    num_pos = round(path_time / time_step) + 1; // +1 to account for current position
+    
+    ROS_INFO("[PredictFilter] -- num_pos:  %d", num_pos);
 
     // publish_timer = nh.createTimer(ros::Duration(1.0 / pub_freq), &PredictFilter::publishSpin, this);
     // publish_timer.stop();
 
-    ROS_INFO("[PredictFilter] -- Init oK");
+    ROS_INFO("[PredictFilter] -- Init OK");
 }
 
 PredictFilter::~PredictFilter() {}
@@ -141,9 +142,9 @@ void PredictFilter::publishPred(float pos_x, float pos_y, float pos_z) {
                      pos_counter,
                      pose_at_x.pose.position.x,
                      pose_at_x.pose.position.y);
-            ROS_INFO("[%d] x_gt:   %f",
-                     pos_counter,
-                     z0_.element(0) + (time_step * pos_counter) * 0.5); // 0.15 m/s of summit (just for debugging)
+            // ROS_INFO("[%d] x_gt:   %f",
+            //          pos_counter,
+            //          z0_.element(0) + (time_step * pos_counter) * 0.5); // 0.15 m/s of summit (just for debugging)
 
             kal_path.path.poses[pos_counter] = pose_at_x;
         }

@@ -7,31 +7,31 @@
         <param name="use_prediction_" value="false"/>
         <param name="cmd_vel_pub_freq" value="100" />
         <param name="adapt_path_idx" value="true" /> <!-- whether to update the path idx when closer to the platform -->
-        <param name="MISSION_DURATION" value="-1" />
+        <param name="MISSION_DURATION" value="40" />
 
         <param name="MAX_ALLOWED_TIME_WITHOUT_SEEING" value="1.0" />
 
-        <param name="manual_gains" value="true" />
+        <param name="manual_gains" value="false" />
         <!-- if set to true, we get a trackbar and can vary the gains during simulation -->
         <!-- if set to false, we compute them depending on the altitude at every instant -->
 
         <!-- PID gains at 4 meters of altitude -->
-        <param name="Kp" value="0.579"/>
-        <param name="Ki" value="0.0987"/>
-        <param name="Kd" value="0.0828"/>
+        <param name="Kp" value="0.8"/>
+        <param name="Ki" value="0.08"/>
+        <param name="Kd" value="0.02"/>
         <!-- <param name="Kp" value="0.33"/>
         <param name="Ki" value="0.02"/>
         <param name="Kd" value="0.0117"/> -->
 
         <!-- PID gains at altitude 0 -->
-        <param name="Kp_min" value="0.69524"/>
-        <param name="Ki_min" value="0.24500"/>
-        <param name="Kd_min" value="0.24500"/>
+        <param name="Kp_min" value="1.25"/>
+        <param name="Ki_min" value="0.75"/> <!-- 1.25 -->
+        <param name="Kd_min" value="0.5"/>
 
         <!-- coefficients used in the decreasing exponential for the height-adaptive PID gains -->
-        <param name="exp_coeff_Kp" value="0.0871767"/>
-        <param name="exp_coeff_Ki" value="0.2027326"/>
-        <param name="exp_coeff_Kd" value="0.2027326"/>
+        <param name="exp_coeff_Kp" value="0.1115718"/>
+        <param name="exp_coeff_Ki" value="0.1115718"/>
+        <param name="exp_coeff_Kd" value="0.8047189"/>
 
         <param name="TRACKING_ALTITUDE" value="4.0"/>
         <param name="MARGIN_TRACKING_ALTITUDE" value="0.2"/>
