@@ -22,7 +22,7 @@ print("Reading from", input_dir)
 if len(sys.argv) == 2:
 	traj_type = sys.argv[1]
 else:
-	traj_type = "circle"
+	traj_type = "c" # "l"
 print("traj_type:", traj_type)
 
 ###############################################################
@@ -38,7 +38,7 @@ means_ez_preds = []
 for i in range(1, 6):
 
 	######### no pred
-	errors_no_pred = pd.read_csv(input_dir + "/errors_NO_pred_{}_{}.csv".format(traj_type, i))
+	errors_no_pred = pd.read_csv(input_dir + "/errors_NO_pred_{}{}.csv".format(traj_type, i))
 
 	ex_no_pred = errors_no_pred['ex'].tolist()
 	means_ex_no_preds.append(st.mean(ex_no_pred))
@@ -50,7 +50,7 @@ for i in range(1, 6):
 	means_ez_no_preds.append(st.mean(ez_no_pred))
 
 	########## pred
-	errors_pred = pd.read_csv(input_dir + "/errors_pred_{}_{}.csv".format(traj_type, i))
+	errors_pred = pd.read_csv(input_dir + "/errors_pred_{}{}.csv".format(traj_type, i))
 
 	ex_pred = errors_pred['ex'].tolist()
 	means_ex_preds.append(st.mean(ex_pred))

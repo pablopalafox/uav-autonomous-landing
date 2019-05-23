@@ -164,7 +164,7 @@ private:
     tf::StampedTransform T_ardrone_world_; // odom is our inertial frame here
 
     // 3d current positions of the platform's centroid in ardrone
-    tf::Vector3 centroid_in_ardrone_;
+    tf::Vector3 centroid_in_ardrone_, centroid_in_world_;
     tf::Vector3 indicator_in_ardrone_;
     double centroid_in_ardrone_stamp_;
     double indicator_in_ardrone_stamp_;
@@ -174,8 +174,6 @@ private:
     int num_pos_in_path_; // number of positions in path
     tf::Vector3 pred_centroid_in_world_;
     tf::Vector3 pred_centroid_in_ardrone_;
-    double pred_path_in_world_stamp_;
-    double pred_centroid_in_world_stamp_;
 
     // groundtruth positions
     tf::Vector3 gt_ardrone_;
@@ -223,8 +221,6 @@ public:
     void altimeterCallback(const cvg_sim_msgs::AltimeterConstPtr& altimeter_msg);
     void groundtruthAltitudeCallback(const takeoff::GroundtruthAltitudeConstPtr& gt_altitude_msg);
 
-    void centroidPositionCallback(const geometry_msgs::PoseStamped& current_centroid);
-    void indicatorPositionCallback(const geometry_msgs::PoseStamped& current_indicator);
     void predPlatformPathCallback(const ped_traj_pred::PathWithId& predicted_path);
 
     void takeoffCallback(const std_msgs::EmptyConstPtr &takeoff_signal);
@@ -283,8 +279,6 @@ PlatformTracking::PlatformTracking() {
     ROS_INFO("Mission duration %f", MISSION_DURATION);
 
     nh_.getParam("cmd_vel_topic", cmd_vel_topic_);
-    nh_.getParam("platform_position_in_ardrone_topic", platform_position_in_ardrone_topic_);
-    nh_.getParam("indicator_position_in_ardrone_topic", indicator_position_in_ardrone_topic_);
     nh_.getParam("predicted_platform_path_in_world_topic", predicted_platform_path_in_world_topic_);
 
     nh_.getParam("sonar_topic", sonar_height_topic_);
@@ -345,12 +339,8 @@ PlatformTracking::PlatformTracking() {
     navdata_pub_             = nh_.advertise<ardrone_autonomy::Navdata>(ardrone_navdata_, 1);
 
     // subscribers
-    platform_position_in_ardrone_sub_   = nh_.subscribe(platform_position_in_ardrone_topic_, 1,
-                                          &PlatformTracking::centroidPositionCallback, this);
-    indicator_postition_in_ardrone_sub_ = nh_.subscribe(indicator_position_in_ardrone_topic_, 1,
-                                          &PlatformTracking::indicatorPositionCallback, this);
-    pred_platform_path_in_world_sub_    = nh_.subscribe(predicted_platform_path_in_world_topic_, 1,
-                                          &PlatformTracking::predPlatformPathCallback, this);
+    pred_platform_path_in_world_sub_ = nh_.subscribe(predicted_platform_path_in_world_topic_, 1,
+                                       &PlatformTracking::predPlatformPathCallback, this);
 
     sonar_height_sub_        = nh_.subscribe(sonar_height_topic_, 1, &PlatformTracking::sonarCallback, this);
     altitude_altimeter_sub_  = nh_.subscribe(altitude_altimeter_topic_, 1, &PlatformTracking::altimeterCallback, this);
@@ -647,11 +637,6 @@ void PlatformTracking::heightControlCallback(const ros::TimerEvent & e) {
      * Finite State Machine control, largely dependent on the height of flight
     */
 
-    // ROS_INFO("has_taken_off_once_ %d", has_taken_off_once_);
-    // ROS_INFO("diff %f", ros::Time::now().toSec() - t_ref_);
-    // ROS_INFO("MISSION_DURATION %f", MISSION_DURATION);
-
-
     bool is_valid_t_ref = std::isfinite(t_ref_);
     if ( has_taken_off_once_ &&  (MISSION_DURATION > 0.0) && is_valid_t_ref && ( (ros::Time::now().toSec() - t_ref_) >= MISSION_DURATION) ) {
         should_land_ = true;
@@ -660,9 +645,6 @@ void PlatformTracking::heightControlCallback(const ros::TimerEvent & e) {
 
     TRACKING_ALTITUDE_ = TRACKING_ALTITUDE_TRACKBAR_ / 100.0;
     use_prediction_ = use_prediction_trackbar_;
-
-    // ROS_INFO("should_take_off_ %d", should_take_off_);
-
 
     if (current_status_ == Status_n::LANDED) {
 
@@ -702,7 +684,7 @@ void PlatformTracking::heightControlCallback(const ros::TimerEvent & e) {
         if (must_land_ && current_status_ != Status_n::FORCED_LANDING) {
             // ROS_INFO("FORCED_LANDING");
             current_status_ = Status_n::FORCED_LANDING;
-            cmd_vel_.linear.z = -0.2;
+            cmd_vel_.linear.z = -0.3;
             must_land_ = false;
         }
         else {
@@ -742,8 +724,7 @@ void PlatformTracking::heightControlCallback(const ros::TimerEvent & e) {
                         if (should_land_) {
                             // ROS_INFO("Let's land");
                             current_status_ = Status_n::LANDING;
-                            navi_state_gazebo_ = LANDING_MODEL;
-                            cmd_vel_.linear.z = -0.5;
+                            // navi_state_gazebo_ = LANDING_MODEL;
                             should_land_ = false;
                         }
                         else if (current_status_ == Status_n::TAKINGOFF) {
@@ -776,32 +757,30 @@ void PlatformTracking::heightControlCallback(const ros::TimerEvent & e) {
                                     cmd_vel_.linear.z = 1.0;
                                 }
                                 else if (ardrone_z_ > (TRACKING_ALTITUDE_ + MARGIN_TRACKING_ALTITUDE_)) {
-                                    cmd_vel_.linear.z = -0.2;
+                                    cmd_vel_.linear.z = -0.3;
                                 }
                                 else {
                                     cmd_vel_.linear.z = 0.0;
                                 }
                             }
-
-
                         }
                     }
                     else { // if we are landing
 
                         // default landing speed
-                        cmd_vel_.linear.z = -0.5;
+                        cmd_vel_.linear.z = -0.3;
 
                         // ROS_INFO("We're stil LANDING...");
                         // ROS_INFO("We're stil LANDING... %f", linear_acceleration_x_);
                         // ROS_INFO("We're stil LANDING... %f", linear_acceleration_y_);
-                        if (sonar_range_ < 0.2) {
+                        if (sonar_range_ < 0.1) {
                             // if sonar says we are on a surface and altitude says were are still flying
                             // then there's a hight chance we have landed successfully on the platform
                             // ROS_INFO("We landed!!!!!");
                             setLandedConfig();
                         }
-                        else if (sonar_range_ < 1.0) {
-                            cmd_vel_.linear.z = -1.0;
+                        else if (sonar_range_ < 0.7) {
+                            cmd_vel_.linear.z = -5.0;
                             /*if (use_prediction_) {
                                 idx_in_path_ = 0;
                             }*/
@@ -863,12 +842,12 @@ void PlatformTracking::heightControlCallback(const ros::TimerEvent & e) {
         // ROS_INFO("altimeter %f", altitude_altimeter_);
         ROS_INFO("TRACKING_ALTITUDE %f", TRACKING_ALTITUDE_);
         ROS_INFO_STREAM("Seen centroid lately: " << seen_centroid_lately_);
-        ROS_INFO_STREAM("Last found time: " << last_found_time_);
-        ROS_INFO_STREAM("dt: " << dt_);
-        ROS_INFO_STREAM("Time w/o seeing: " << time_without_seeing_);
-        ROS_INFO_STREAM("Dist in xy plane to centroid: " << dist_in_xy_plane_to_centroid_);
-        ROS_INFO_STREAM("Dist to platform's X axis: " << distance_to_x_axis_platform_);
-        ROS_INFO_STREAM("Dist to platform's Y axis: " << distance_to_y_axis_platform_);
+        // ROS_INFO_STREAM("Last found time: " << last_found_time_);
+        // ROS_INFO_STREAM("dt: " << dt_);
+        // ROS_INFO_STREAM("Time w/o seeing: " << time_without_seeing_);
+        // ROS_INFO_STREAM("Dist in xy plane to centroid: " << dist_in_xy_plane_to_centroid_);
+        // ROS_INFO_STREAM("Dist to platform's X axis: " << distance_to_x_axis_platform_);
+        // ROS_INFO_STREAM("Dist to platform's Y axis: " << distance_to_y_axis_platform_);
         ROS_INFO("Derivative (%f, %f)", derror_x_, derror_y_);
         ROS_INFO("Error sum (%f, %f)", error_sum_x_, error_sum_y_);
         ROS_INFO("Kp: %f, Ki: %f, Kd: %f", Kp_, Ki_, Kd_);
@@ -876,10 +855,6 @@ void PlatformTracking::heightControlCallback(const ros::TimerEvent & e) {
                  target_.getX(),
                  target_.getY(),
                  target_.getZ());
-        // if (!areAllCmdVelZero()) {
-        //     ROS_INFO("linear: (%f, %f, %f)", cmd_vel_.linear.x, cmd_vel_.linear.y, cmd_vel_.linear.z);
-        //     ROS_INFO("yaw: %f", cmd_vel_.angular.z);
-        // }
         ROS_INFO("linear: (%f, %f, %f)", cmd_vel_.linear.x, cmd_vel_.linear.y, cmd_vel_.linear.z);
         ROS_INFO("yaw: %f", cmd_vel_.angular.z);
         ROS_INFO("---");
@@ -895,7 +870,6 @@ void PlatformTracking::heightControlCallback(const ros::TimerEvent & e) {
                        target_.getY(),
                        target_.getZ());
     }
-
 }
 
 bool PlatformTracking::is_position_NaN(const tf::Vector3 &v) {
@@ -906,137 +880,63 @@ void PlatformTracking::computeDistanceInXYPlaneToPlatformCentroid() {
     dist_in_xy_plane_to_centroid_ = sqrt(pow(centroid_in_ardrone_.getX(), 2) + pow(centroid_in_ardrone_.getY(), 2));
 }
 
-void PlatformTracking::computeDistanceToPlatformAxes() {
-
-    const double diff = indicator_in_ardrone_stamp_ - centroid_in_ardrone_stamp_;
-
-    // check if the indicator and the centroid corresponding to roughly the same moment in time
-    if (diff > 0.05) {
-        valid_dist_to_axis_ = false;
-        return;
-    }
-
-    //SEGMENT VECTOR
-    segment_.setX(indicator_in_ardrone_.getX() - centroid_in_ardrone_.getX());
-    segment_.setY(indicator_in_ardrone_.getY() - centroid_in_ardrone_.getY());
-
-    //Hallamos el vector unitario de segment
-    double segment_norm = sqrt( pow(segment_.getX(), 2) + pow(segment_.getY(), 2) );
-    segment_.setX( segment_.getX() / segment_norm);
-    segment_.setY( segment_.getY() / segment_norm);
-    // ROS_INFO("segment in ardrone: (%f, %f)", segment_.getX(), segment_.getY());
-
-    //PERP_SEGMENT VECTOR (ya va a ser perpendicular)
-    perp_segment_.setX(-segment_.getY());
-    perp_segment_.setY(segment_.getX());
-
-    // ROS_INFO("perp_segment in ardrone: (%f, %f)", perp_segment_.getX(), perp_segment_.getY());
-
-    distance_to_x_axis_platform_ = fabs((centroid_in_ardrone_.getX() * perp_segment_.getX())
-                                        + (centroid_in_ardrone_.getY() * perp_segment_.getY()));
-
-    distance_to_y_axis_platform_ = fabs((centroid_in_ardrone_.getX() * segment_.getX())
-                                        + (centroid_in_ardrone_.getY() * segment_.getY()));
-    valid_dist_to_axis_ = true;
-}
-
-void PlatformTracking::indicatorPositionCallback(const geometry_msgs::PoseStamped &current_indicator) {
-    indicator_in_ardrone_ = tf::Vector3(current_indicator.pose.position.x,
-                                        current_indicator.pose.position.y,
-                                        current_indicator.pose.position.z);
-    indicator_in_ardrone_stamp_  = current_indicator.header.stamp.toSec();
-}
-
 void PlatformTracking::predPlatformPathCallback(const ped_traj_pred::PathWithId& predicted_path) {
 
-    if (use_prediction_) {
+    num_pos_in_path_ = predicted_path.path.poses.size();
 
-        num_pos_in_path_ = predicted_path.path.poses.size();
-
-        if (idx_in_path_ >= num_pos_in_path_) {
-            ROS_FATAL("Requested idx %d of path, but max idx is %d", idx_in_path_, num_pos_in_path_ - 1);
-            ROS_INFO("Falling back to idx %d", num_pos_in_path_ - 1);
-            idx_in_path_ = num_pos_in_path_ - 1;
-        }
-        else if (idx_in_path_ == -1) {
-            // get last prediction in predicted path
-            idx_in_path_ = 1 /*num_pos_in_path_ - 1*/;
-        }
-
-        /// retrieve the path's element define by idx_in_path_
-        /// * idx_in_path_ = 0 means we get the closest prediction (less noisy, thus more accurate)
-        /// * idx_in_path_ = end() means we get the latest prediction (more noisy, thus less accurate)
-        /// NOTE: idx_in_path_ changes dynamically with height
-        // ROS_INFO("Getting position %d from predicted path", idx_in_path_);
-        geometry_msgs::PoseStamped pred_pose_in_world = predicted_path.path.poses[idx_in_path_];
-
-        pred_centroid_in_world_ = tf::Vector3(pred_pose_in_world.pose.position.x,
-                                              pred_pose_in_world.pose.position.y,
-                                              pred_pose_in_world.pose.position.z);
-
-        if (is_position_NaN(pred_centroid_in_world_)) {
-            ROS_INFO("pred_centroid_in_world_ is NaN!");
-            return;
-        }
-
-        pred_path_in_world_stamp_ = predicted_path.path.header.stamp.toSec();
-        pred_centroid_in_world_stamp_ = pred_pose_in_world.header.stamp.toSec(); // TODO: do we need this one?
-
-        try {
-            // tf_listener_.waitForTransform("/ardrone/base_link", "/odom",
-            //                               predicted_path.path.header.stamp, ros::Duration(0.1));
-            // tf_listener_.lookupTransform("/ardrone/base_link", "/odom",
-            //                              predicted_path.path.header.stamp, T_ardrone_world_);
-            tf_listener_.lookupTransform("/ardrone/base_link", "/odom",
-                                         ros::Time(0), T_ardrone_world_);
-        } catch (tf::TransformException ex) {
-            ROS_ERROR("%s", ex.what());
-            ros::Duration(1.0).sleep();
-        }
-
-        pred_centroid_in_ardrone_ = T_ardrone_world_ * pred_centroid_in_world_;
-        // ROS_INFO("pred: x: %f, y: %f", pred_centroid_in_ardrone_.getX(), pred_centroid_in_ardrone_.getY());
-
-        if (current_status_ == Status_n::RELOCALIZING) {
-            ROS_INFO("predPlatformPathCallback::Platform found again!!!");
-            ROS_INFO("predPlatformPathCallback::Tracking...");
-            // if we were relocalizing the landing platform, stop the reloc maneuver
-            setCmdVelToZero();
-            // and set the status to TRACKING
-            current_status_ = Status_n::TRACKING;
-        }
-
-        follow_platform();
+    if (idx_in_path_ >= num_pos_in_path_) {
+        ROS_FATAL("Requested idx %d of path, but max idx is %d", idx_in_path_, num_pos_in_path_ - 1);
+        ROS_INFO("Falling back to idx %d", num_pos_in_path_ - 1);
+        idx_in_path_ = num_pos_in_path_ - 1;
     }
-}
+    else if (idx_in_path_ == -1) {
+        // get last prediction in predicted path
+        idx_in_path_ = 1 /*num_pos_in_path_ - 1*/;
+    }
 
-void PlatformTracking::centroidPositionCallback(const geometry_msgs::PoseStamped & current_centroid) {
+    // predicted ardrone pose in world
+    geometry_msgs::PoseStamped pred_pose_in_world = predicted_path.path.poses[idx_in_path_];
+    pred_centroid_in_world_ = tf::Vector3(pred_pose_in_world.pose.position.x,
+                                          pred_pose_in_world.pose.position.y,
+                                          pred_pose_in_world.pose.position.z);
 
-    centroid_in_ardrone_ = tf::Vector3(current_centroid.pose.position.x,
-                                       current_centroid.pose.position.y,
-                                       current_centroid.pose.position.z);
+    // current ardrone pose in world
+    geometry_msgs::PoseStamped pose_in_world = predicted_path.path.poses[0];
+    centroid_in_world_ = tf::Vector3(pose_in_world.pose.position.x,
+                                     pose_in_world.pose.position.y,
+                                     pose_in_world.pose.position.z);
 
-    if (is_position_NaN(centroid_in_ardrone_)) {
-        ROS_INFO("centroid_in_ardrone_ is NaN!");
+    if (is_position_NaN(pred_centroid_in_world_)) {
+        ROS_INFO("pred_centroid_in_world_ is NaN!");
         return;
     }
 
-    // ROS_INFO("%f, %f, %f", centroid_in_ardrone_.getX(), centroid_in_ardrone_.getY(), centroid_in_ardrone_.getZ());
-
-    centroid_in_ardrone_stamp_ = current_centroid.header.stamp.toSec();
-
-    if (!use_prediction_) {
-        if (current_status_ == Status_n::RELOCALIZING) {
-            ROS_INFO("centroidPositionCallback::Platform found again!!!");
-            ROS_INFO("centroidPositionCallback::Tracking...");
-            // if we were relocalizing the landing platform, stop the reloc maneuver
-            setCmdVelToZero();
-            // and set the status to TRACKING
-            current_status_ = Status_n::TRACKING;
-        }
-
-        follow_platform();
+    if (is_position_NaN(centroid_in_world_)) {
+        ROS_INFO("centroid_in_world_ is NaN!");
+        return;
     }
+
+    try {
+        tf_listener_.lookupTransform("/ardrone/base_link", "/odom",
+                                     ros::Time(0), T_ardrone_world_);
+    } catch (tf::TransformException ex) {
+        ROS_ERROR("%s", ex.what());
+        ros::Duration(1.0).sleep();
+    }
+
+    pred_centroid_in_ardrone_ = T_ardrone_world_ * pred_centroid_in_world_;
+    centroid_in_ardrone_ = T_ardrone_world_ * centroid_in_world_;
+
+    if (current_status_ == Status_n::RELOCALIZING) {
+        ROS_INFO("predPlatformPathCallback::Platform found again!!!");
+        ROS_INFO("predPlatformPathCallback::Tracking...");
+        // if we were relocalizing the landing platform, stop the reloc maneuver
+        setCmdVelToZero();
+        // and set the status to TRACKING
+        current_status_ = Status_n::TRACKING;
+    }
+
+    follow_platform();
 }
 
 void PlatformTracking::follow_platform() {
@@ -1088,7 +988,7 @@ void PlatformTracking::follow_platform() {
 
         computeDistanceInXYPlaneToPlatformCentroid();
 
-        if (dist_in_xy_plane_to_centroid_ <= 0.01 && !use_prediction_) {
+        if (dist_in_xy_plane_to_centroid_ <= 0.01) {
             // if really close to the target, better stay still
             cmd_vel_.linear.x = 0.0;
             cmd_vel_.linear.y = 0.0;
@@ -1101,53 +1001,11 @@ void PlatformTracking::follow_platform() {
         else {
             cmd_vel_.linear.x = (Kp_ * target_.getX()) + (Ki_ * error_sum_x_) + (Kd_ * derror_x_);
             cmd_vel_.linear.y = (Kp_ * target_.getY()) + (Ki_ * error_sum_y_) + (Kd_ * derror_y_);
-            if (std::isnan(cmd_vel_.linear.x) || std::isnan(cmd_vel_.linear.y)) {
-                // ROS_INFO("x: %f, y: %f", target_.getX(), target_.getY());
-                // ROS_INFO("x: %f, y: %f", Kp_ * target_.getX(), Kp_ * target_.getY());
-
-                // ROS_INFO("x: %f, y: %f", error_sum_x_, error_sum_y_);
-                // ROS_INFO("x: %f, y: %f", Ki_ * error_sum_x_, Ki_ * error_sum_y_);
-
-
-                // ROS_INFO("dt %f", dt_);
-                // ROS_INFO("current %f", current_time);
-                // ROS_INFO("last %f", last_found_time_);
-
-                // ROS_INFO("x: %f, y: %f", derror_x_, derror_y_);
-                // ROS_INFO("x: %f, y: %f", Kd_ * derror_x_, Kd_ * derror_y_);
-
-                // ROS_INFO_STREAM(target_.getX() << target_.getY());
-                ROS_INFO("nan!!!!!!!!!!!!!!!!!!");
-            }
-            // ROS_INFO("linear: (%f, %f, %f)", cmd_vel_.linear.x, cmd_vel_.linear.y, cmd_vel_.linear.z);
         }
 
         // store target and current time for next iteration
         target_prev_ = target_;
         last_found_time_ = current_time_;
-
-        // /// save errors to file
-        // saveStateToCsv(current_time - t_ref_,
-        //                centroid_in_ardrone_.getX(),
-        //                centroid_in_ardrone_.getY(),
-        //                centroid_in_ardrone_.getZ());
-
-
-        /// TODO: does this bring anything to the table???
-        /// WE CALCULTE THE DISTANCE FROM THE QUADROTOR TO THE PLATFORM's axes
-        // computeDistanceToPlatformAxes();
-        // if (valid_dist_to_axis_) {
-        //     if (distance_to_x_axis_platform_ <= 0.01
-        //             && !std::isnan(distance_to_x_axis_platform_)
-        //             && (dist_in_xy_plane_to_centroid_ > 0.5)) {
-        //         setErrorSumToZero("x");
-        //     }
-        //     if (distance_to_y_axis_platform_ <= 0.01
-        //             && !std::isnan(distance_to_y_axis_platform_)
-        //             && (dist_in_xy_plane_to_centroid_ > 0.5)) {
-        //         setErrorSumToZero("y");
-        //     }
-        // }
     }
 } // end of tracking callback
 

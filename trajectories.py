@@ -12,30 +12,27 @@ mpl.rcParams['legend.fontsize'] = 12
 input_dir = "/home/pablo/ws/log/trajectories"
 print("Reading from", input_dir) 
 
-## -- type experiment number
-if len(sys.argv) == 2:
-	test_num = sys.argv[1]
+## -- type of trajectory and experiment number
+if len(sys.argv) == 3:
+	traj_type = sys.argv[1]
+	test_num = sys.argv[2]
 else:
+	traj_type = "c" # c for circular ---- l for linear
 	test_num = "1"
-test_num = str(test_num)
+
+print("traj_type:", traj_type)
 print("test_num:", test_num)
 
-## -- type of traj
-if len(sys.argv) == 3:
-	traj_type = sys.argv[2]
-else:
-	traj_type = "circle"
-print("traj_type:", traj_type)
 
 ## -- save dir
-save_dir = "/home/pablo/ws/log/trajectories/{}_{}".format(traj_type, test_num)
+save_dir = "/home/pablo/ws/log/trajectories/{}{}".format(traj_type, test_num)
 if not os.path.exists(save_dir):
 	os.makedirs(save_dir)
 
 ##########################################################
 ################### w/ PREDICTION ########################
 ##########################################################
-trajectories_pred = pd.read_csv(input_dir + "/trajectories_pred_{}_{}.csv".format(traj_type, test_num))
+trajectories_pred = pd.read_csv(input_dir + "/trajectories_pred_{}{}.csv".format(traj_type, test_num))
 
 # extract data from DataFrame
 ardrone_x = trajectories_pred['aX'].tolist()
@@ -77,7 +74,7 @@ fig.savefig(os.path.join(save_dir, "traj2D_pred.png"), format='png')
 ##########################################################
 ##################### w/o PREDICTION #####################
 ##########################################################
-trajectories_no_pred = pd.read_csv(input_dir + "/trajectories_NO_pred_{}_{}.csv".format(traj_type, test_num))
+trajectories_no_pred = pd.read_csv(input_dir + "/trajectories_NO_pred_{}{}.csv".format(traj_type, test_num))
 
 # extract data from DataFrame
 ardrone_x = trajectories_no_pred['aX'].tolist()

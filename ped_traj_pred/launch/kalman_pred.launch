@@ -22,7 +22,7 @@
 
 
         <param name="model_covariance" value="2.0" />
-        <param name="observation_covariance" value="1.0" />
+        <param name="observation_covariance" value="2.0" />
 
         <param name="future_path_topic" value="/kalman_prediction_path"/>
 

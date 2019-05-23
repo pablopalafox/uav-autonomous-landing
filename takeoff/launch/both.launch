@@ -40,7 +40,7 @@
            
     <!-- Call a python script to the run a service call to gazebo_ros to spawn a URDF robot -->
     <arg name="x" default="0"/>
-    <arg name="y" default="2.0"/>
+    <arg name="y" default="0.0"/>
     <arg name="z" default="0"/>
     <arg name="R" default="0"/>
     <arg name="P" default="0"/>

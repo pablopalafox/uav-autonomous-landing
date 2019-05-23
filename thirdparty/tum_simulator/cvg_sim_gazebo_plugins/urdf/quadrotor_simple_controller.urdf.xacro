@@ -26,7 +26,7 @@ xmlns:xacro="http://ros.org/wiki/xacro"
         <velocityXYLimit>2</velocityXYLimit>
         <velocityZProportionalGain>5.0</velocityZProportionalGain>
         <velocityZDifferentialGain>1.0</velocityZDifferentialGain>
-        <velocityZLimit>1.0</velocityZLimit> <!-- 0.5 -->
+        <velocityZLimit>5.0</velocityZLimit> <!-- 0.5 -->
         <maxForce>30</maxForce>
         <motionSmallNoise>0.0</motionSmallNoise> <!-- 0.05 -->
         <motionDriftNoise>0.0</motionDriftNoise> <!-- 0.03 -->

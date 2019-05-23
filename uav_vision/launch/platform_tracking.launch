@@ -4,10 +4,10 @@
 
 	<node name="platform_tracking" pkg="uav_vision" type="platform_tracking" output="screen">
         <param name="verbose" value="true" />
-        <param name="use_prediction_" value="false"/>
+        <param name="use_prediction_" value="true"/>
         <param name="cmd_vel_pub_freq" value="100" />
         <param name="adapt_path_idx" value="true" /> <!-- whether to update the path idx when closer to the platform -->
-        <param name="MISSION_DURATION" value="40" />
+        <param name="MISSION_DURATION" value="30.0" />
 
         <param name="MAX_ALLOWED_TIME_WITHOUT_SEEING" value="1.0" />
 
@@ -16,25 +16,25 @@
         <!-- if set to false, we compute them depending on the altitude at every instant -->
 
         <!-- PID gains at 4 meters of altitude -->
-        <param name="Kp" value="0.8"/>
-        <param name="Ki" value="0.08"/>
-        <param name="Kd" value="0.02"/>
+        <param name="Kp" value="0.45"/>
+        <param name="Ki" value="0.1"/>
+        <param name="Kd" value="0.0"/>
         <!-- <param name="Kp" value="0.33"/>
         <param name="Ki" value="0.02"/>
         <param name="Kd" value="0.0117"/> -->
 
         <!-- PID gains at altitude 0 -->
-        <param name="Kp_min" value="1.25"/>
-        <param name="Ki_min" value="0.75"/> <!-- 1.25 -->
-        <param name="Kd_min" value="0.5"/>
+        <param name="Kp_min" value="0.7"/> <!-- 0.55 -->
+        <param name="Ki_min" value="0.2"/> <!-- 0.12 -->
+        <param name="Kd_min" value="0.0"/>
 
         <!-- coefficients used in the decreasing exponential for the height-adaptive PID gains -->
-        <param name="exp_coeff_Kp" value="0.1115718"/>
-        <param name="exp_coeff_Ki" value="0.1115718"/>
-        <param name="exp_coeff_Kd" value="0.8047189"/>
+        <param name="exp_coeff_Kp" value="0.002"/>
+        <param name="exp_coeff_Ki" value="0.002"/>
+        <param name="exp_coeff_Kd" value="0.0"/>
 
         <param name="TRACKING_ALTITUDE" value="4.0"/>
-        <param name="MARGIN_TRACKING_ALTITUDE" value="0.2"/>
+        <param name="MARGIN_TRACKING_ALTITUDE" value="0.1"/>
 
         <!--TOPICS-->
         <param name="cmd_vel_topic" value="/ardrone/cmd_vel"/>

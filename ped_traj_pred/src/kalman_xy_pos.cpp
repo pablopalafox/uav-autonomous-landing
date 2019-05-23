@@ -56,8 +56,9 @@ KalmanXYPos::KalmanXYPos() {
       << 0 << 0 <<     0     <<     1;
 
     // Process noise covariance matrix Q
-    Q = Matrix(state_vec_size, state_vec_size);
-    computeProcessNoiseCovariance();
+    Q = IdentityMatrix(state_vec_size);
+    Q = Q * model_covariance;
+    // computeProcessNoiseCovariance();
 
     ROS_INFO("[KALMAN XY POS] - Kalman filter init OK!");
 }
@@ -76,6 +77,8 @@ void KalmanXYPos::computeProcessNoiseCovariance() {
 
     Q_top = col_vec_G * col_vec_G.t();
     Q_top = Q_top * model_covariance;
+
+    ROS_INFO_STREAM(Q_top(1, 1) << " " << Q_top(2, 2) << "\n");
 
     Q  << Q_top(1, 1) <<      0      <<      0      <<      0
        <<      0      << Q_top(2, 2) <<      0      <<      0
