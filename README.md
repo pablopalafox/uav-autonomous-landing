@@ -1,4 +1,4 @@
-# Vision-based Autonomus Landing of UAV on a Moving Platform using Predictive Control
+# Visual-aided Autonomous Takeoff and Landing of a small UAV on a Moving Landing Platform
 
 
 
