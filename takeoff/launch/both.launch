@@ -21,6 +21,11 @@
     <arg name="paused" value="false"/>
     <arg name="use_sim_time" value="true"/>
     <arg name="headless" value="false"/>
+    <gui>
+    <camera name="user_camera">
+      <pose>0 0 0 0 0 0</pose>
+    </camera>
+    </gui>
   </include>
 
 

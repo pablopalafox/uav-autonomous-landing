@@ -1,95 +1,138 @@
 ## numpy is used for creating fake data
-import numpy as np 
-import matplotlib as mpl 
+import numpy as np
 import os
 import sys
 import pandas as pd
 import statistics as st
 
-## agg backend is used to create plot as a .png file
-#mpl.use('agg')
-
 import matplotlib.pyplot as plt
+import seaborn as sns
+sns.set(style="whitegrid")
 
 ###############################################################
 
 save = True
-LIM_Y = 0.15
+LIM_Y_MAX = 0.15
+LIM_Y_MIN = 0.05
+DPI = 5000
 
 input_dir = "/home/pablo/ws/log/errors"
 print("Reading from", input_dir) 
 
-## -- type of traj
-if len(sys.argv) == 2:
-	traj_types = [sys.argv[1]]
-else:
-	traj_types = ["l", "c"]
+save_dir = "/home/pablo/ws/log"
+save = True
 
+ylabel_x = -0.11	
+ylabel_y = 0.5
 ###############################################################
 
-for traj_type in traj_types:
+ex = []
+ex_trajs = []
+ex_modes = []
 
-	print("traj_type:", traj_type)
-
-	means_ex_no_preds = []
-	means_ey_no_preds = []
-
-	means_ex_preds = []
-	means_ey_preds = []
-
-	for i in range(1, 6):
-
-		######### no pred
-		errors_no_pred = pd.read_csv(input_dir + "/errors_NO_pred_{}{}.csv".format(traj_type, i))
-
-		ex_no_pred = errors_no_pred['ex_real'].tolist()
-		means_ex_no_preds.append(st.mean(ex_no_pred))
-
-		ey_no_pred = errors_no_pred['ey_real'].tolist()
-		means_ey_no_preds.append(st.mean(ey_no_pred))
+ey = []
+ey_trajs = []
+ey_modes = []
 
 
-		########## pred
-		errors_pred = pd.read_csv(input_dir + "/errors_pred_{}{}.csv".format(traj_type, i))
+for i in range(1, 6):
 
-		ex_pred = errors_pred['ex_real'].tolist()
-		means_ex_preds.append(st.mean(ex_pred))
+	######### no pred
+	errors_no_pred_linear = pd.read_csv(input_dir + "/errors_NO_pred_l{}.csv".format( i))
+	errors_no_pred_circular = pd.read_csv(input_dir + "/errors_NO_pred_c{}.csv".format( i))
 
-		ey_pred = errors_pred['ey_real'].tolist()
-		means_ey_preds.append(st.mean(ey_pred))
+	# linear
+	ex_no_pred_linear = errors_no_pred_linear['ex_real'].tolist()
+	ex.append(st.mean(ex_no_pred_linear))
+	ex_trajs.append('linear')
+	ex_modes.append('w/o pred')
+
+	ey_no_pred_linear = errors_no_pred_linear['ey_real'].tolist()
+	ey.append(st.mean(ey_no_pred_linear))
+	ey_trajs.append('linear')
+	ey_modes.append('w/o pred')
+
+	# circular
+	ex_no_pred_circular = errors_no_pred_circular['ex_real'].tolist()
+	ex.append(st.mean(ex_no_pred_circular))
+	ex_trajs.append('circular')
+	ex_modes.append('w/o pred')
+
+	ey_no_pred_circular = errors_no_pred_circular['ey_real'].tolist()
+	ey.append(st.mean(ey_no_pred_circular))
+	ey_trajs.append('circular')
+	ey_modes.append('w/o pred')
 
 
-	## combine these different collections into a list    
-	ex = [means_ex_no_preds, means_ex_preds]
-	ey = [means_ey_no_preds, means_ey_preds]
+	######### pred
+	errors_pred_linear = pd.read_csv(input_dir + "/errors_pred_l{}.csv".format( i))
+	errors_pred_circular = pd.read_csv(input_dir + "/errors_pred_c{}.csv".format( i))
 
-	## ex
-	fig, ax = plt.subplots()
-	bp = ax.boxplot(ex, labels=("w/o pred","w/ pred"))
-	ax.set(xlabel='trajectory type', ylabel='error in x (m)')
-	plt.ylim((-LIM_Y, LIM_Y))   # set the ylim to bottom, top
-	if traj_type == "c":
-		plt.title("circular trajectory")
-	elif traj_type == "l":
-		plt.title("linear trajectory")
-	ax.grid()
-	ax.legend()
-	if save:
-		fig.savefig("/home/pablo/ws/log/ex_boxplot_{}.pdf".format(traj_type), format='pdf')
+	# linear
+	ex_pred_linear = errors_pred_linear['ex_real'].tolist()
+	ex.append(st.mean(ex_pred_linear))
+	ex_trajs.append('linear')
+	ex_modes.append('w/ pred')
 
-	## ey
-	fig, ax = plt.subplots()
-	bp = ax.boxplot(ey, labels=("w/o pred","w/ pred"))
-	ax.set(xlabel='trajectory type', ylabel='error in y (m)')
-	plt.ylim((-LIM_Y, LIM_Y))   # set the ylim to bottom, top
-	if traj_type == "c":
-		plt.title("circular trajectory")
-	elif traj_type == "l":
-		plt.title("linear trajectory")
-	ax.grid()
-	ax.legend()
-	if save:
-		fig.savefig("/home/pablo/ws/log/ey_boxplot_{}.pdf".format(traj_type), format='pdf')
+	ey_pred_linear = errors_pred_linear['ey_real'].tolist()
+	ey.append(st.mean(ey_pred_linear))
+	ey_trajs.append('linear')
+	ey_modes.append('w/ pred')
 
+	# circular
+	ex_pred_circular = errors_pred_circular['ex_real'].tolist()
+	ex.append(st.mean(ex_pred_circular))
+	ex_trajs.append('circular')
+	ex_modes.append('w/ pred')
+
+	ey_pred_circular = errors_pred_circular['ey_real'].tolist()
+	ey.append(st.mean(ey_pred_circular))
+	ey_trajs.append('circular')
+	ey_modes.append('w/ pred')
+
+###################################################################3
+
+fig = plt.figure()
+ex_dic = {'traj': ex_trajs, 
+	  	  'mode': ex_modes,
+	  	  'ex': ex}
+df_ex = pd.DataFrame(ex_dic, columns= ['traj', 'mode', 'ex'])
+ax = sns.boxplot(y='ex', x='traj', 
+     	    data=df_ex, 
+         	palette="colorblind",
+         	hue='mode',
+         	width=0.5)
+ax.set(xlabel='trajectory', ylabel='error in x axis (m)')
+ax.yaxis.set_label_coords(ylabel_x, ylabel_y)
+for i,artist in enumerate(ax.artists):
+    # Set the linecolor on the artist to the facecolor, and set the facecolor to None
+    col = artist.get_facecolor()
+    artist.set_edgecolor(col)
+
+if save:
+	fig.savefig(os.path.join(save_dir, "boxplot_ex.pdf"), format='pdf', dpi=DPI)
+
+###################################################################
+
+fig = plt.figure()
+ey_dic = {'traj': ey_trajs, 
+	  	  'mode': ey_modes,
+	  	  'ey': ey}
+df_ey = pd.DataFrame(ey_dic, columns= ['traj', 'mode', 'ey'])
+ax = sns.boxplot(y='ey', x='traj', 
+     	    data=df_ey, 
+         	palette="colorblind",
+         	hue='mode',
+         	width=0.5)
+ax.set(xlabel='trajectory', ylabel='error in y axis (m)')
+ax.yaxis.set_label_coords(ylabel_x, ylabel_y)
+for i,artist in enumerate(ax.artists):
+    # Set the linecolor on the artist to the facecolor, and set the facecolor to None
+    col = artist.get_facecolor()
+    print(col)
+    artist.set_edgecolor(col)
+
+if save:
+	fig.savefig(os.path.join(save_dir, "boxplot_ey.pdf"), format='pdf', dpi=DPI)
 
 plt.show()

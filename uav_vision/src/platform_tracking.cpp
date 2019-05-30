@@ -77,6 +77,7 @@ typedef Status_n::Status_t Status;
 class PlatformTracking {
 private:
     bool verbose_;
+    bool save_logs_;
     bool manual_gains_;
     double cmd_vel_pub_freq_;
     bool adapt_path_idx_, adapt_path_idx_again_;
@@ -241,6 +242,7 @@ PlatformTracking::PlatformTracking() {
     ros::NodeHandle nh_("~");
 
     verbose_ = true;
+    save_logs_ = true;
     manual_gains_ = false;
     cmd_vel_pub_freq_ = 0.5;
     adapt_path_idx_ = true;
@@ -272,6 +274,7 @@ PlatformTracking::PlatformTracking() {
 
     // get params
     nh_.getParam("verbose", verbose_);
+    nh_.getParam("save_logs", save_logs_);
     nh_.getParam("manual_gains", manual_gains_);
     nh_.getParam("cmd_vel_pub_freq", cmd_vel_pub_freq_);
     nh_.getParam("adapt_path_idx", adapt_path_idx_);
@@ -384,46 +387,46 @@ PlatformTracking::~PlatformTracking() {
 void PlatformTracking::takeoffCallback(const std_msgs::EmptyConstPtr & takeoff_signal) {
     t_ref_ = ros::Time::now().toSec();
 
-    std::string log_dir = "/home/pablo/ws/log";
+    if (save_logs_) {
+        std::string log_dir = "/home/pablo/ws/log";
 
-    std::string errors_dir = log_dir + "/errors";
-    std::string create_errors_dir = "mkdir -p " + errors_dir;
+        std::string errors_dir = log_dir + "/errors";
+        std::string create_errors_dir = "mkdir -p " + errors_dir;
 
-    std::string trajectories_dir = log_dir + "/trajectories";
-    std::string create_trajectories_dir = "mkdir -p " + trajectories_dir;
+        std::string trajectories_dir = log_dir + "/trajectories";
+        std::string create_trajectories_dir = "mkdir -p " + trajectories_dir;
 
-    // ROS_INFO_STREAM(create_errors_dir);
-    // ROS_INFO_STREAM(create_trajectories_dir);
+        // Create dirs
+        const int dir_errors = system(create_errors_dir.c_str());
+        const int dir_trajectories = system(create_trajectories_dir.c_str());
+        if (dir_errors == -1 || dir_trajectories == -1) {
+            ROS_ERROR("Error creating directories");
+            exit(1);
+        }
 
-    // Create dirs
-    const int dir_errors = system(create_errors_dir.c_str());
-    const int dir_trajectories = system(create_trajectories_dir.c_str());
-    if (dir_errors == -1 || dir_trajectories == -1) {
-        ROS_ERROR("Error creating directories");
-        exit(1);
+        // Build file's names depending on type of approach
+        std::string type;
+        if (use_prediction_)
+            type = "pred";
+        else
+            type = "NO_pred";
+
+        std::ostringstream oss;
+        oss << errors_dir << "/errors_" << type << ".csv";
+        if (!errorsFile_.is_open()) {
+            errorsFile_.open(oss.str());
+            errorsFile_ << "t,ex_real,ey_real,ez_real,ex_target,ey_target,ez_target\n";
+        }
+
+        oss.str("");
+        oss.clear();
+        oss << "/home/pablo/ws/log/trajectories/trajectories_" << type << ".csv";
+        if (!trajFile_.is_open()) {
+            trajFile_.open(oss.str());
+            trajFile_ << "aX,aY,aZ,sX,sY,sZ\n";
+        }
     }
 
-    // Build file's names depending on type of approach
-    std::string type;
-    if (use_prediction_)
-        type = "pred";
-    else
-        type = "NO_pred";
-
-    std::ostringstream oss;
-    oss << errors_dir << "/errors_" << type << ".csv";
-    if (!errorsFile_.is_open()) {
-        errorsFile_.open(oss.str());
-        errorsFile_ << "t,ex_real,ey_real,ez_real,ex_target,ey_target,ez_target\n";
-    }
-
-    oss.str("");
-    oss.clear();
-    oss << "/home/pablo/ws/log/trajectories/trajectories_" << type << ".csv";
-    if (!trajFile_.is_open()) {
-        trajFile_.open(oss.str());
-        trajFile_ << "aX,aY,aZ,sX,sY,sZ\n";
-    }
     should_take_off_ = true;
     // ROS_INFO("Quadrotor taking off...");
     has_taken_off_once_ = true;
@@ -754,7 +757,7 @@ void PlatformTracking::heightControlCallback(const ros::TimerEvent & e) {
                                 navi_state_gazebo_ = FLYING_MODEL;
 
                                 if (ardrone_z_ < (TRACKING_ALTITUDE_ - MARGIN_TRACKING_ALTITUDE_)) {
-                                    cmd_vel_.linear.z = 1.0;
+                                    cmd_vel_.linear.z = 0.3;
                                 }
                                 else if (ardrone_z_ > (TRACKING_ALTITUDE_ + MARGIN_TRACKING_ALTITUDE_)) {
                                     cmd_vel_.linear.z = -0.3;

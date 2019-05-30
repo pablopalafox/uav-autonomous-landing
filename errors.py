@@ -77,7 +77,7 @@ for traj_type, test_num in itertools.product(traj_types, test_nums):
 	ax.plot(t_pred, ey_pred_real, 'g', label='predictive')
 	ax.plot(t_no_pred, ey_no_pred_real, 'r', label='non-predictive')
 	ax.set(xlabel='time (s)', ylabel='error in y (m)')
-	plt.ylim((-1, 1))   # set the ylim to bottom, top
+	plt.ylim((-0.5, 0.5))   # set the ylim to bottom, top
 	ax.grid()
 	ax.legend()
 	fig.savefig(os.path.join(save_dir, "ey.pdf"), format='pdf', dpi=DPI)

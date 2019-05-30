@@ -65,8 +65,11 @@ for traj_type, test_num in itertools.product(traj_types, test_nums):
 	ax.plot(ardrone_x, ardrone_y, 'r', label='UAV')
 	ax.plot(summit_x, summit_y, 'g', label='UGV')
 	ax.set(xlabel='x (m)', ylabel='y (m)')
-	bottom, top = plt.ylim()  # return the current ylim
-	plt.ylim((bottom-1, top+1))   # set the ylim to bottom, top
+	if traj_type == "l":
+		plt.ylim((-0.5, 0.5))
+	# else:
+	# 	bottom, top = plt.ylim()  # return the current ylim
+	# 	plt.ylim((bottom-1, top+1))   # set the ylim to bottom, top
 	ax.legend()
 	ax.grid()
 	fig.savefig(os.path.join(save_dir, "traj2D_pred.pdf"), format='pdf', dpi=DPI)
@@ -107,8 +110,11 @@ for traj_type, test_num in itertools.product(traj_types, test_nums):
 	ax.plot(ardrone_x, ardrone_y, 'r', label='UAV')
 	ax.plot(summit_x, summit_y, 'g', label='UGV')
 	ax.set(xlabel='x (m)', ylabel='y (m)')
-	bottom, top = plt.ylim()  # return the current ylim
-	plt.ylim((bottom-1, top+1))   # set the ylim to bottom, top
+	if traj_type == "l":
+		plt.ylim((-0.5, 0.5))
+	# else:
+	# 	bottom, top = plt.ylim()  # return the current ylim
+	# 	plt.ylim((bottom-1, top+1))   # set the ylim to bottom, top
 	ax.legend()
 	ax.grid()
 	fig.savefig(os.path.join(save_dir, "traj2D_NO_pred.pdf"), format='pdf', dpi=DPI)
