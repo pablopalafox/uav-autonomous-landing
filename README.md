@@ -1,4 +1,4 @@
-# Visual-aided Autonomous Takeoff and Landing of a small UAV on a Moving Landing Platform
+# Robust Visual-Aided Autonomous Takeoff, Tracking and Landing of a small UAV on a Moving Landing Platform for Life-Long Operation
 
 
 
