@@ -3,6 +3,11 @@
 Authors: [Pablo R. Palafox](https://pablorpalafox.github.io/), Mario Garzón, João Valente, Juan Jesús Roldán and Antonio Barrientos
 
 
+Click on the image below to watch a VIDEO demonstrating the system on Cityscapes:
+
+[![VIDEO](http://img.youtube.com/vi/CCrPBw_we2E/0.jpg)](https://youtu.be/CCrPBw_we2E)
+
+
 ## 1. Prerequisites
 
 We have tested our system on ROS Kinetic and Ubuntu 16.04.
