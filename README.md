@@ -1,5 +1,6 @@
-# Vision-based Autonomus Landing of UAV on a Moving Platform using Predictive Control
+# Robust Visual-Aided Autonomous Takeoff, Tracking and Landing of a small UAV on a Moving Landing Platform for Life-Long Operation
 
+Authors: [Pablo R. Palafox](https://pablorpalafox.github.io/), Mario Garzón, João Valente, Juan Jesús Roldán and Antonio Barrientos
 
 
 ## 1. Prerequisites
@@ -27,7 +28,7 @@ $ catkin_make
 $ source devel/setup.bash
 ```
 
-The followin instructions correspond to the simulated environment. (Documentation for the real environment will be released soon.)
+The following instructions correspond to the simulated environment. (Documentation for the real environment will be released soon.)
 
 Launch the world with both the UGV and the UAV:
 
