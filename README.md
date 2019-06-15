@@ -1,5 +1,6 @@
 # Robust Visual-Aided Autonomous Takeoff, Tracking and Landing of a small UAV on a Moving Landing Platform for Life-Long Operation
 
+Authors: Pablo R. Palafox, Mario Garzón, João Valente, Juan Jesús Roldán and Antonio Barrientos
 
 
 ## 1. Prerequisites
