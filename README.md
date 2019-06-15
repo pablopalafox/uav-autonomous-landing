@@ -3,7 +3,7 @@
 Authors: [Pablo R. Palafox](https://pablorpalafox.github.io/), Mario Garzón, João Valente, Juan Jesús Roldán and Antonio Barrientos
 
 
-Click on the image below to watch a [VIDEO](https://youtu.be/CCrPBw_we2E) demonstrating the system on Cityscapes:
+Click on the image below to watch a [VIDEO](https://youtu.be/CCrPBw_we2E) demonstrating the system:
 
 [![VIDEO](http://img.youtube.com/vi/CCrPBw_we2E/0.jpg)](https://youtu.be/CCrPBw_we2E)
 
