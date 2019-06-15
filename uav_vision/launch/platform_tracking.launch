@@ -5,12 +5,13 @@
 	<node name="platform_tracking" pkg="uav_vision" type="platform_tracking" output="screen">
         <param name="verbose" value="true" />
         <param name="save_logs" value="true" />
-        <param name="use_prediction_" value="false"/>
+        <param name="use_prediction_" value="true"/>
         <param name="cmd_vel_pub_freq" value="100" />
         <param name="adapt_path_idx" value="true" /> <!-- whether to update the path idx when closer to the platform -->
-        <param name="MISSION_DURATION" value="30.0" />
+        <param name="MISSION_DURATION" value="10.0" />
 
-        <param name="MAX_ALLOWED_TIME_WITHOUT_SEEING" value="1.0" />
+        <param name="MAX_ALLOWED_TIME_WITHOUT_SEEING" value="0.5" />
+        <param name="MAX_ALLOWED_ERROR_BEFORE_LANDING" value="0.25" />
 
         <param name="manual_gains" value="false" />
         <!-- if set to true, we get a trackbar and can vary the gains during simulation -->

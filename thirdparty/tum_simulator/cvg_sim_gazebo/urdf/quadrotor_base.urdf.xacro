@@ -33,8 +33,8 @@ xmlns:xacro="http://ros.org/wiki/xacro">
 
 
     <gazebo reference="base_link">
-      <!--  --><turnGravityOff>false</turnGravityOff>
-      <gravity>false</gravity>
+      <turnGravityOff>false</turnGravityOff>
+      <!-- <gravity>false</gravity> -->
     </gazebo>
 
     <!-- Gazebo Plugins -->

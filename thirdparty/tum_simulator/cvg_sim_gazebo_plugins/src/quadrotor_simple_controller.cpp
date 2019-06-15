@@ -351,8 +351,8 @@ void GazeboQuadrotorSimpleController::Update()
   }
   else if (navi_state == TAKINGOFF_MODEL)
   {
-    link->AddRelativeForce(force * 1.2);
-    link->AddRelativeTorque(torque * 1.2);
+    link->AddRelativeForce(force * 1.3);
+    link->AddRelativeTorque(torque * 1.3);
   }
   else if (navi_state == LANDING_MODEL)
   {
