@@ -2,17 +2,9 @@
 
 Authors: [Pablo R. Palafox](https://pablorpalafox.github.io/), Mario Garzón, João Valente, Juan Jesús Roldán and Antonio Barrientos
 
-[Paper](https://www.mdpi.com/2076-3417/9/13/2661)
+Implementation of the following [paper](https://www.mdpi.com/2076-3417/9/13/2661)
 
-If you find this work useful in your research, please cite:
 
-    @article{palafox2019robust,
-        Author = {Palafox, Pablo R. and Garzón, Mario and Valente,
-                  Joao and Roldán, Juan Jesús and Barrientos, Antonio},
-        Title = {Robust Visual-Aided Autonomous Takeoff, Tracking, and Landing of a Small UAV on a Moving Landing Platform for Life-Long Operation},
-        Booktitle = {Applied Sciences 9(13):2661},
-        Year = {2019}
-    }
    
 
 
