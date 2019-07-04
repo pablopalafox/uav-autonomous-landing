@@ -6,7 +6,7 @@ Authors: [Pablo R. Palafox](https://pablorpalafox.github.io/), Mario Garzón, Jo
 
 If you find this work useful in your research, please cite:
 
-    @inproceedings{palafox2019robust,
+    @article{palafox2019robust,
         Author = {Palafox, Pablo R. and Garzón, Mario and Valente,
                   Joao and Roldán, Juan Jesús and Barrientos, Antonio},
         Title = {Robust Visual-Aided Autonomous Takeoff, Tracking, and Landing of a Small UAV on a Moving Landing Platform for Life-Long Operation},
