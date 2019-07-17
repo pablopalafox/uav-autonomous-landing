@@ -2,7 +2,7 @@
 
 Created by [Pablo R. Palafox](https://pablorpalafox.github.io/), Mario Garzón, João Valente, Juan Jesús Roldán and Antonio Barrientos
 
-![](real_system.gif)
+![](docs/uav_landing.gif)
 
 ### Publication
 This code is the implementation of the following [paper](https://www.mdpi.com/2076-3417/9/13/2661)
