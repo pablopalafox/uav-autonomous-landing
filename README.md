@@ -1,11 +1,27 @@
 # Robust Visual-Aided Autonomous Takeoff, Tracking and Landing of a small UAV on a Moving Landing Platform for Life-Long Operation
 
-Authors: [Pablo R. Palafox](https://pablorpalafox.github.io/), Mario Garzón, João Valente, Juan Jesús Roldán and Antonio Barrientos
+Created by [Pablo R. Palafox](https://pablorpalafox.github.io/), Mario Garzón, João Valente, Juan Jesús Roldán and Antonio Barrientos
 
-Implementation of the following [paper](https://www.mdpi.com/2076-3417/9/13/2661)
+![](real_system.gif)
 
+### Publication
+This code is the implementation of the following [paper](https://www.mdpi.com/2076-3417/9/13/2661)
 
+If you find our work useful in your research, please cite:
+
+         @article{palafox2019robust,
+           title={Robust Visual-Aided Autonomous Takeoff, Tracking, and Landing of a Small UAV on a Moving Landing Platform for Life-Long Operation},
+           author={Palafox, Pablo R and Garz{\'o}n, Mario and Valente, Jo{\~a}o and Rold{\'a}n, Juan Jes{\'u}s and Barrientos, Antonio},
+           journal={Applied Sciences},
+           volume={9},
+           number={13},
+           pages={2661},
+           year={2019},
+           publisher={Multidisciplinary Digital Publishing Institute}
+         }
    
+### Abstract
+Robot cooperation is key in Search and Rescue (SaR) tasks. Frequently, these tasks take place in complex scenarios affected by different types of disasters, so an aerial viewpoint is useful for autonomous navigation or human tele-operation. In such cases, an Unmanned Aerial Vehicle (UAV) in cooperation with an Unmanned Ground Vehicle (UGV) can provide valuable insight into the area. To carry out its work successfully, such as multi-robot system requires the autonomous takeoff, tracking, and landing of the UAV on the moving UGV. Furthermore, it needs to be robust and capable of life-long operation. In this paper, we present an autonomous system that enables a UAV to take off autonomously from a moving landing platform, locate it using visual cues, follow it, and robustly land on it. The system relies on a finite state machine, which together with a novel re-localization module allows the system to operate robustly for extended periods of time and to recover from potential failed landing maneuvers. Two approaches for tracking and landing are developed, implemented, and tested. The first variant is based on a novel height-adaptive PID controller that uses the current position of the landing platform as the target. The second one combines this height-adaptive PID controller with a Kalman filter in order to predict the future positions of the platform and provide them as input to the PID controller. This facilitates tracking and, mainly, landing. Both the system as a whole and the re-localization module in particular have been tested extensively in a simulated environment (Gazebo). We also present a qualitative evaluation of the system on the real robotic platforms, demonstrating that our system can also be deployed on real robotic platforms.
 
 
 Click on the image below to watch a [VIDEO](https://youtu.be/CCrPBw_we2E) demonstrating the system:
