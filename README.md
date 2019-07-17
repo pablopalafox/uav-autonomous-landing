@@ -2,7 +2,9 @@
 
 Created by [Pablo R. Palafox](https://pablorpalafox.github.io/), Mario Garzón, João Valente, Juan Jesús Roldán and Antonio Barrientos
 
-![](/docs/uav_landing.gif)
+<p align="center">
+  <img src="/docs/uav_landing.gif" alt="">
+</p>
 
 ### Publication
 This code is the implementation of the following [paper](https://www.mdpi.com/2076-3417/9/13/2661)
