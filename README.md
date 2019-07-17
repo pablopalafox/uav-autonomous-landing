@@ -2,7 +2,7 @@
 
 Created by [Pablo R. Palafox](https://pablorpalafox.github.io/), Mario Garzón, João Valente, Juan Jesús Roldán and Antonio Barrientos
 
-![](docs/uav_landing.gif)
+![](/docs/uav_landing.gif)
 
 ### Publication
 This code is the implementation of the following [paper](https://www.mdpi.com/2076-3417/9/13/2661)
@@ -26,7 +26,7 @@ Robot cooperation is key in Search and Rescue (SaR) tasks. Frequently, these tas
 
 Click on the image below to watch a [VIDEO](https://youtu.be/CCrPBw_we2E) demonstrating the system:
 
-[![VIDEO](http://img.youtube.com/vi/CCrPBw_we2E/0.jpg)](https://youtu.be/CCrPBw_we2E)
+[![https://youtu.be/CCrPBw_we2E](http://img.youtube.com/vi/CCrPBw_we2E/0.jpg)](https://youtu.be/CCrPBw_we2E)
 
 
 ## 1. Prerequisites
