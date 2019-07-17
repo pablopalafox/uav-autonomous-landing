@@ -2,7 +2,7 @@
 
 Created by [Pablo R. Palafox](https://pablorpalafox.github.io/), Mario Garzón, João Valente, Juan Jesús Roldán and Antonio Barrientos
 
-![](/docs/uav_landing.gif)
+![](/docs/landing.gif)
 <!-- <p align="center">
   <img src="/docs/uav_landing.gif" alt="">
 </p> -->
