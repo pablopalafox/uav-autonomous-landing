@@ -68,8 +68,8 @@ The following instructions correspond to the simulated environment. (Documentati
 Connect a PS3 joystick to your computer and verify that the port it has been assigned to matches that defined in [uav-autonomous-landing/takeoff/launch/ardrone_teleop.launch](takeoff/launch/ardrone_teleop.launch), i.e., `value="/dev/input/js0"`. You can install `jstest-gtk` to test your joystick / controller:
 
 ```bash
-sudo apt-get update
-sudo apt-get install jstest-gtk
+$ sudo apt-get update
+$ sudo apt-get install jstest-gtk
 ```
 
 Now launch the world with both the UGV and the UAV:
