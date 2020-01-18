@@ -65,7 +65,9 @@ $ source devel/setup.bash
 
 The following instructions correspond to the simulated environment. (Documentation for the real environment will be released soon.)
 
-Launch the world with both the UGV and the UAV:
+Connect a PS3 joystick to your computer and verify that the port it has been assigned to matches that defined in [uav-autonomous-landing/takeoff/launch/ardrone_teleop.launch](uav-autonomous-landing/takeoff/launch/ardrone_teleop.launch), i.e., `value="/dev/input/js0"`.
+
+Now launch the world with both the UGV and the UAV:
 
 ```bash
 $ roslaunch takeoff both.launch
