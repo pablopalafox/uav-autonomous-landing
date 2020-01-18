@@ -37,20 +37,27 @@ We have tested our system on ROS Kinetic and Ubuntu 16.04.
 
 You can follow [this](http://wiki.ros.org/kinetic/Installation/Ubuntu) tutorial to install ROS Kinetic.
 
-Once you're done, you can install all required ROS packages for this project by running the following command:
-
-```bash
-$ chmod +x install_dependencies.sh
-$ ./install_dependencies.sh
-```
 
 ## 2. Usage
 
-Create a catkin workspace and move into it. Then clone this repository into a folder named `src`. Finally, go back to `ws`, build the workspace and source your environment:
+Create a catkin workspace and move into it. Then clone this repository into a folder (e.g., `src`). We'll install some ROS dependencies and, finally, go back to `ws`, build the workspace and source your environment. The individual steps are:
 
 ```bash
 $ mkdir ws && cd ws
 $ git clone git@github.com:pablorpalafox/uav-autonomous-landing.git src
+```
+
+Install all required ROS packages for this project by running:
+
+```bash
+$ cd src
+$ chmod +x install_dependencies.sh
+$ ./install_dependencies.sh
+```
+
+Finally, compile the project and source your environment:
+
+```bash
 $ cd ..
 $ catkin_make
 $ source devel/setup.bash

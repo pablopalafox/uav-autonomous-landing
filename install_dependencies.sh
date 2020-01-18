@@ -18,5 +18,5 @@ sudo apt-get install ros-kinetic-ros-control \
 					 ros-kinetic-velocity-controllers \
 					 ros-kinetic-message-to-tf \
 					 ros-kinetic-mavros-msgs \
-					 ros-kinetic-hector-uav-msgs
+					 #ros-kinetic-hector-uav-msgs
 
