@@ -138,8 +138,8 @@ private:
 
     // topics
     std::string cmd_vel_topic_;
-    std::string platform_position_in_ardrone_topic_;  //! published by platform_detection node
-    std::string indicator_position_in_ardrone_topic_; //! published by platform_detection node
+    // std::string platform_position_in_ardrone_topic_;  //! published by platform_detection node
+    // std::string indicator_position_in_ardrone_topic_; //! published by platform_detection node
     std::string predicted_platform_path_in_world_topic_; //! published by ped_traj_pred
 
     std::string sonar_height_topic_, altitude_altimeter_topic_;
@@ -337,13 +337,13 @@ PlatformTracking::PlatformTracking() {
         cv::createTrackbar("Kd", "Gains", &Kd_trackbar_, 1000, NULL);
         cv::createTrackbar("h_track", "Gains", &TRACKING_ALTITUDE_TRACKBAR_, 600, NULL);
         cv::createTrackbar("use_pred", "Gains", &use_prediction_trackbar_, 1, NULL);
-        cv::createTrackbar("idx", "Gains", &idx_in_path_, 5, NULL);
+        // cv::createTrackbar("idx", "Gains", &idx_in_path_, 5, NULL);
     }
     else {
         cv::namedWindow("Params");
         cv::createTrackbar("h_track", "Params", &TRACKING_ALTITUDE_TRACKBAR_, 600, NULL);
         cv::createTrackbar("use_pred", "Params", &use_prediction_trackbar_, 1, NULL);
-        cv::createTrackbar("idx", "Params", &idx_in_path_, 5, NULL);
+        // cv::createTrackbar("idx", "Params", &idx_in_path_, 5, NULL);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////

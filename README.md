@@ -84,11 +84,15 @@ In a different terminal (don't forget to source the environment everytime you op
 $ roslaunch uav_vision detection_tracking.launch
 ```
 
-Now you can start moving the Summit (UGV) by launching the corresponding node `summit_moves`:
+Finally, also in a different terminal (don't forget `source devel/setup.bash`), launch the Kalman prediction module:
 
 ```bash
-$ roslaunch summit_moves summit_moves.launch
+$ roslaunch ped_traj_pred kalman_pred.launch
 ```
+
+The node `ped_traj_pred` will be listening to the landing platform's centroid topic (`/platform/current_platform_position_in_world`), published by the `platform_detection` node. It will predict a vector of future positions of the landing platform (the first item in this vector is the current position, so that we can also use a non-predictive system). You can decide whether to use a predictive or a non-predictive system by toggling the `use_pred` parameter in the trackbar that pops up when launching `detection_tracking.launch`.
+
+Now you can start moving the Summit (UGV) and the UAV by pressing `L1` on your PS3 joystick. By default, the drone should start taking off, then land automatically after some seconds and take off again after a couple of seconds on the platform. This is the default mission, but feel free to design your own!
 
 ### 
 

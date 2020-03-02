@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(takeoff)
 
+add_compile_options(-std=c++11)
+
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
@@ -52,7 +54,7 @@ target_link_libraries(takeoff ${catkin_LIBRARIES})
 
 add_executable(robot_state_broadcaster src/robot_state_broadcaster.cpp)
 target_link_libraries(robot_state_broadcaster ${catkin_LIBRARIES})
-add_dependencies(robot_state_broadcaster takeoff_generate_messages_cpp)
+add_dependencies(robot_state_broadcaster takeoff_gencpp)
 
 add_executable(ardrone_teleop src/ardrone_joystick.cpp)
 target_link_libraries(ardrone_teleop ${catkin_LIBRARIES})
